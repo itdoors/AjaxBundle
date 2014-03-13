@@ -13,18 +13,13 @@
         "MIT"
     ],
     "require" : {
+        "php":                      ">=5.3.17",
+        "symfony/framework-bundle": ">=2.3.0",
     },
     "autoload" : {
         "psr-0" : {
             "ITDoors\\AjaxBundle" : ""
         }
     },
-    "target-dir" : "ITDoors/AjaxBundle",
-    "repositories" : [
-    ],
-    "extra" : {
-        "branch-alias" : {
-            "dev-master" : "2.2-dev"
-        }
-    }
+    "target-dir" : "ITDoors/AjaxBundle"
 }
