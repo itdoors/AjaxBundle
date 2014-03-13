@@ -16,8 +16,8 @@ class DaterangeType extends AbstractType
         $builder
             ->add('text', 'text', array(
                 'attr' => array(
-                    'class_outer' => 'input-group  sd-daterange',
-                    'class' => 'form-control can-be-reseted sd-daterange-text',
+                    'class_outer' => 'input-group  itdoors-daterange',
+                    'class' => 'form-control can-be-reseted itdoors-daterange-text',
                     'placeholder' => 'Enter date range'
                 )
             ))
@@ -26,7 +26,7 @@ class DaterangeType extends AbstractType
                 'format' => 'dd.MM.yyyy',
                 'attr' => array(
                     'class_outer' => 'hidden',
-                    'class' => 'sd-daterange-start can-be-reseted'
+                    'class' => 'itdoors-daterange-start can-be-reseted'
                 )
             ))
             ->add('end', 'date', array(
@@ -34,7 +34,7 @@ class DaterangeType extends AbstractType
                 'format' => 'dd.MM.yyyy',
                 'attr' => array(
                     'class_outer' => 'hidden',
-                    'class' => 'sd-daterange-end can-be-reseted'
+                    'class' => 'itdoors-daterange-end can-be-reseted'
                 )
             ));
     }
