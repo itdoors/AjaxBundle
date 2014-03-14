@@ -7,9 +7,16 @@
         "name" : "ppecheny",
         "email" : "pp@itdoors.com.ua"
     }],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:itdoors/CommonBundle.git"
+        }
+    ],
     "license" : "MIT",
     "require" : {
-        "php":                      ">=5.3.17"
+        "php":                      ">=5.3.17",
+        "itdoors/commonbundle": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload" : {
