@@ -8,13 +8,11 @@
         'novalidate': 'novalidate'
     }
 }) }}
-<div class="form-group col-md-12 row">
-    {% for child in form %}
-        {% if child.vars.block_prefixes.1 != 'submit' %}
-            {{ form_row(child) }}
-        {% endif %}
-    {% endfor %}
-</div>
+{% for child in form %}
+    {% if child.vars.block_prefixes.1 != 'submit' %}
+        {{ form_row(child) }}
+    {% endif %}
+{% endfor %}
 
 <input type="hidden" name="formAlias" value="{{ form.vars.name }}">
 <input type="hidden" name="reset" value="0" class="ajax-form-reset-field">
