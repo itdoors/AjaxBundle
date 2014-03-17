@@ -3,13 +3,13 @@
 namespace ITDoors\AjaxBundle\Twig;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Twig extention for rendering filte form
+ * Twig extention for rendering filter form
  *
- * @author Pavel Pechreny ppecheny@gmail.com
+ * @author Pavel Pecheny <ppecheny@gmail.com>
+ *
  */
 class AjaxFilterExtention extends \Twig_Extension
 {
@@ -19,12 +19,14 @@ class AjaxFilterExtention extends \Twig_Extension
     protected $environment;
 
     /**
-     * @var Container $container
+     * @var Container
      */
     protected $container;
 
     /**
      * __construct()
+     *
+     * @param Container $container
      */
     public function __construct(Container $container)
     {
@@ -53,11 +55,11 @@ class AjaxFilterExtention extends \Twig_Extension
     /**
      * Renders filter form for ajax submit
      *
-     * @param string $formAlias form service alias
-     * @param string $filterNamespace filter session holder name
+     * @param string   $formAlias        form service alias
+     * @param string   $filterNamespace  filter session holder name
      * @param string[] $successFunctions function that triggers when filter form is valid \
-     *        array('targetId' => array('functionName1', 'functionName2'))
-     * @param boolean $isShort if true then render without submit btns
+     *                                   array('targetId' => array('functionName1', 'functionName2'))
+     * @param boolean  $isShort          if true then render without submit btns
      *
      * @return string
      */
@@ -79,8 +81,7 @@ class AjaxFilterExtention extends \Twig_Extension
                 'data' => $filterNamespace
             ));
 
-        if (sizeof($successFunctions))
-        {
+        if (sizeof($successFunctions)) {
             $form
                 ->add('successFunctions', 'hidden', array(
                     'data' => json_encode($successFunctions)
@@ -104,10 +105,10 @@ class AjaxFilterExtention extends \Twig_Extension
     /**
      * Renders filter form for ajax submit without submit btns
      *
-     * @param string $formAlias form service alias
-     * @param string $filterNamespace filter session holder name
+     * @param string   $formAlias        form service alias
+     * @param string   $filterNamespace  filter session holder name
      * @param string[] $successFunctions function that triggers when filter form is valid \
-     *        array('targetId' => array('functionName1', 'functionName2'))
+     *                                   array('targetId' => array('functionName1', 'functionName2'))
      *
      * @return string
      */
@@ -118,6 +119,10 @@ class AjaxFilterExtention extends \Twig_Extension
 
     /**
      * Return session filter data depending on filter namespace
+     *
+     * @param string $namespace
+     *
+     * @return mixed[]
      */
     public function getSessionFilters($namespace)
     {

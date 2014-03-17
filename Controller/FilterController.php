@@ -31,8 +31,7 @@ class FilterController extends Controller
 
         if ($request->request->get('reset')) {
             $this->clearFilters($requestData['filterNamespace']);
-        }
-        else {
+        } else {
 
             $form->handleRequest($request);
 
@@ -48,17 +47,13 @@ class FilterController extends Controller
             'successFunctions' => isset($requestData['successFunctions']) ? $requestData['successFunctions'] : array()
         );
 
-        /*$result['html'] = $this->renderView('ITDoorsAjaxBundle:Filter:form.html.twig', array(
-            'form' => $form->createView(),
-        ));*/
-
         return new Response(json_encode($result));
     }
 
     /**
      * Sets filter info to the session
      *
-     * @param string $filterNamespace
+     * @param string  $filterNamespace
      * @param mixed[] $filters
      */
     public function setFilters($filterNamespace, $filters)
