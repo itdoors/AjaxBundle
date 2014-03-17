@@ -8,9 +8,6 @@
         "email" : "pp@itdoors.com.ua"
     }],
     "license" : "MIT",
-    "require" : {
-        "php":                      ">=5.3.17"
-    },
     "minimum-stability": "dev",
     "autoload" : {
         "psr-0" : {
