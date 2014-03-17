@@ -3,6 +3,7 @@
 namespace ITDoors\AjaxBundle\Twig;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -44,7 +45,8 @@ class AjaxFilterExtention extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ajax_filter_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html')))
+            'ajax_filter_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'ajax_filter_render_short' => new \Twig_Function_Method($this, 'renderShort', array('is_safe' => array('html')))
         );
     }
 
@@ -55,10 +57,11 @@ class AjaxFilterExtention extends \Twig_Extension
      * @param string $filterNamespace filter session holder name
      * @param string[] $successFunctions function that triggers when filter form is valid \
      *        array('targetId' => array('functionName1', 'functionName2'))
+     * @param boolean $isShort if true then render without submit btns
      *
      * @return string
      */
-    public function render($formAlias, $filterNamespace, $successFunctions = array())
+    public function render($formAlias, $filterNamespace, $successFunctions = array(), $isShort = false)
     {
         $sessionFilters = $this->getSessionFilters($filterNamespace);
 
@@ -84,14 +87,33 @@ class AjaxFilterExtention extends \Twig_Extension
                 ));
         }
 
-        // Maybe need add in controller... will see
-        $form
-            ->add('submit', 'submit')
-            ->add('reset', 'submit');
+        if (!$isShort) {
+            // Maybe need add in controller... will see
+            $form
+                ->add('submit', 'submit')
+                ->add('reset', 'submit');
+        }
 
-        return $this->environment->render('ITDoorsAjaxBundle:Filter:form.html.twig', array(
+        $template = $isShort ? 'formShort.html.twig' : 'form.html.twig';
+
+        return $this->environment->render("ITDoorsAjaxBundle:Filter:{$template}", array(
             'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * Renders filter form for ajax submit without submit btns
+     *
+     * @param string $formAlias form service alias
+     * @param string $filterNamespace filter session holder name
+     * @param string[] $successFunctions function that triggers when filter form is valid \
+     *        array('targetId' => array('functionName1', 'functionName2'))
+     *
+     * @return string
+     */
+    public function renderShort($formAlias, $filterNamespace, $successFunctions = array())
+    {
+        return $this->render($formAlias, $filterNamespace, $successFunctions, true);
     }
 
     /**

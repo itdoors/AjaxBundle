@@ -1,0 +1,23 @@
+{% form_theme form 'ITDoorsAjaxBundle:Form:fieldsShort.html.twig' %}
+
+{{ form_start(form, {
+        'action' : path('it_doors_ajax_filter'),
+        'attr' : {
+        'method' : 'POST',
+        'class' : 'ajax-filter-form itdoors-short-form',
+        'novalidate': 'novalidate'
+    }
+}) }}
+<div class="form-group col-md-12 row">
+    {% for child in form %}
+        {% if child.vars.block_prefixes.1 != 'submit' %}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+</div>
+
+<input type="hidden" name="formAlias" value="{{ form.vars.name }}">
+<input type="hidden" name="reset" value="0" class="ajax-form-reset-field">
+
+{{ form_end(form) }}
+

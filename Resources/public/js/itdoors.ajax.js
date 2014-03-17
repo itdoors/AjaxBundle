@@ -2,10 +2,11 @@ var ITDoorsAjax = (function() {
 
     var defaults = {
         ajaxFilterFormClass: 'ajax-filter-form',
+        shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'itdoors-select2',
         daterangeClass: 'itdoors-daterange',
-        daterangeClass: 'itdoors-daterange',
+        daterangeCustomClass: 'itdoors-daterange-custom',
         daterangeTextClass: 'itdoors-daterange-text',
         daterangeStartClass: 'itdoors-daterange-start',
         daterangeEndClass: 'itdoors-daterange-end',
@@ -28,6 +29,8 @@ var ITDoorsAjax = (function() {
         this.initSelect2();
 
         this.initDateRange();
+
+        this.initDateRangeCustom();
     }
 
     ITDoorsAjax.prototype.initSelect2 = function()
@@ -54,6 +57,8 @@ var ITDoorsAjax = (function() {
         $('.' + selfClass.params.daterangeClass).each(function(index) {
             var self = $(this);
 
+            var $form = self.closest('form');
+
             var btn =
                 '<span class="input-group-btn">' +
                     '<button class="btn default date-range-toggle" type="button">' +
@@ -78,8 +83,92 @@ var ITDoorsAjax = (function() {
                     daterangeEnd.val(end.format('DD.MM.YYYY'));
 
                     self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+
+                    if ($form.hasClass(selfClass.params.shortFormClass))
+                    {
+                        $form.trigger('change');
+                    }
                 }
             );
+        });
+    }
+
+    ITDoorsAjax.prototype.initDateRangeCustom = function()
+    {
+        var selfClass = this;
+
+        if (!jQuery().daterangepicker) {
+            return;
+        }
+
+        $('.' + selfClass.params.daterangeCustomClass).each(function(index) {
+            var self = $(this);
+
+            var $form = self.closest('form');
+
+            var btn =
+                '<span class="input-group-btn">' +
+                    '<button class="btn default date-range-toggle" type="button">' +
+                    '   <i class="fa fa-calendar"></i>' +
+                    '</button>'
+                '</span>';
+
+            self.append($(btn));
+
+            $(this).daterangepicker({
+                    opens:  'right',
+                    startDate: moment().subtract('days', 29),
+                    endDate: moment(),
+                    dateLimit: {
+                        days: 60
+                    },
+                    showDropdowns: false,
+                    showWeekNumbers: true,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    ranges: {
+                        'Сегодня': [moment(), moment()],
+                        'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                        'Последняя неделя': [moment().subtract('days', 6), moment()],
+                        'Последние 30 дней': [moment().subtract('days', 29), moment()],
+                        'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                        'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                    },
+                    buttonClasses: ['btn'],
+                    applyClass: 'blue',
+                    cancelClass: 'default',
+                    format: 'MM/DD/YYYY',
+                    separator: ' до ',
+                    language: 'ru',
+                    locale: {
+                        applyLabel: 'Принять',
+                        fromLabel: 'До',
+                        toLabel: 'С',
+                        customRangeLabel: 'Выберите интервал',
+                        daysOfWeek: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+                        monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+                        firstDay: 1
+                    }
+                },
+                function (start, end) {
+                    var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
+                    var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
+
+                    daterangeStart.val(start.format('DD.MM.YYYY'));
+                    daterangeEnd.val(end.format('DD.MM.YYYY'));
+
+                    self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+
+                    if ($form.hasClass(selfClass.params.shortFormClass))
+                    {
+                        $form.trigger('change');
+                    }
+                }
+            );
+
+            self.find('input').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+            $(this).show();
         });
     }
 
@@ -297,6 +386,10 @@ var ITDoorsAjax = (function() {
                     }
                 }
             });
+        });
+
+        var $formShort = $('.' + selfClass.params.ajaxFilterFormClass + '.' + selfClass.params.shortFormClass).live('change', function(){
+            $(this).submit();
         });
     };
 
