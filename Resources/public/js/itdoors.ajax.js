@@ -256,6 +256,12 @@ var ITDoorsAjax = (function() {
 
         params = $.extend(params, defaultParams);
 
+        var choices = $selector.data('choices');
+
+        if (choices) {
+            params.data = choices;
+        }
+
         if (url)
         {
             params.ajax = {
