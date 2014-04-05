@@ -1,6 +1,8 @@
 var ITDoorsAjax = (function() {
 
     var defaults = {
+        ajaxFormClass: 'itdoors-ajax-form',
+        ajaxFormBtnClass: 'itdoors-ajax-form-btn',
         ajaxFilterFormClass: 'ajax-filter-form',
         shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
@@ -25,6 +27,8 @@ var ITDoorsAjax = (function() {
         this.params.loadingImgPath = this.params.assetsDir + 'templates/metronic/img/ajax-loading.gif';
 
         this.initAjaxFilterForm();
+
+        this.initAjaxForm();
 
         this.initSelect2();
 
@@ -398,6 +402,121 @@ var ITDoorsAjax = (function() {
             $(this).submit();
         });
     };
+
+    /**
+     * Init Btn, onClick - load form from params
+     *
+     * @param {Object} $selector
+     */
+    ITDoorsAjax.prototype.initAjaxFormBtn = function($selector) {
+        var selfClass = this;
+
+        var params = $selector.data('params');
+        var $target = $(params.target);
+
+        $selector.die('click');
+
+        $selector.live('click', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: params.url,
+                data: {
+                    params: JSON.stringify(params)
+                },
+                beforeSend: function() {
+                    console.log('before send');
+                    if (!$target.html()) {
+                        $target.show();
+                        $target.html(params.loadingText);
+                    }
+                    $target.show();
+                    selfClass.blockUI($target);
+                },
+                success: function(response) {
+                    $selector.hide();
+                    $target.show();
+                    $target.html(response.content);
+                    selfClass.unblockUI($target);
+                }
+            });
+        });
+    };
+
+    ITDoorsAjax.prototype.initAjaxForm = function()
+    {
+        var selfClass = this;
+
+        var $form = $('.' + selfClass.params.ajaxFormClass)
+
+        $('.' + selfClass.params.ajaxFormClass + ' .itdoors-form-cancel-btn').live('click', function(e){
+            e.preventDefault();
+
+            var params = JSON.parse($(this).closest('form').find('.params-hidden').val());
+
+            var $selector = $(params.selector);
+            var $target = $(params.target);
+
+            $selector.fadeIn();
+            $target.html('');
+        });
+
+        $form.live('submit', function(e){
+
+            e.preventDefault();
+
+            var self = $(this);
+
+            $(this).ajaxSubmit({
+                dataType: 'json',
+                beforeSend: function () {
+
+                    selfClass.blockUI(self);
+                },
+                success: function(response) {
+
+                    selfClass.unblockUI(self);
+
+                    if (response.error)
+                    {
+                        return;
+                    }
+
+                    if (response.success)
+                    {
+                        var params = JSON.parse(response.params);
+
+                        var $selector = $(params.selector);
+                        var $target = $(params.target);
+
+                        $selector.fadeIn();
+                        $target.html('');
+
+                        if (params.successFunctions){
+                            var successFunctions = params.successFunctions;
+
+                            for (key in successFunctions) {
+                                var successFunction = successFunctions[key].split('.');
+
+                                if (successFunction[0] && successFunction[1]) {
+                                    if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                                        formok = window[successFunction[0]][successFunction[1]](key);
+                                    }
+                                }
+                                else {
+                                    if (typeof window[successFunctions[key]] === 'function'){
+                                        formok = window[successFunctions[key]](key);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    }
 
     return new ITDoorsAjax();
 })();

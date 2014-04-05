@@ -1,0 +1,8 @@
+<script type="text/javascript">
+    var $selector = $('{{ options.selector }}');
+
+    $selector.data('params', {{ options|json_encode|raw }})
+    console.log($selector);
+
+    ITDoorsAjax.initAjaxFormBtn($selector);
+</script>

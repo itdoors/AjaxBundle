@@ -1,0 +1,38 @@
+{% form_theme form 'ITDoorsAjaxBundle:Form:fields.html.twig' %}
+<div class="row ">
+    <div class="col-md-12">
+        {% if form.vars.valid is sameas(false) %}
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {
+            'action' : path('it_doors_ajax_form'),
+            'attr' : {
+            'method' : 'POST',
+            'class' : 'itdoors-ajax-form',
+            'novalidate': 'novalidate'
+        }
+        }) }}
+        <div class="form-group col-md-12 row">
+            {% for child in form %}
+                {% if child.vars.block_prefixes.1 != 'submit' %}
+                    {{ form_row(child) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            <div class="form-actions">
+                {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn'} } ) }}
+            </div>
+        </div>
+
+        <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+
+        {{ form_end(form) }}
+    </div>
+</div>

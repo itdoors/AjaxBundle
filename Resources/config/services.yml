@@ -1,9 +1,16 @@
 parameters:
-    it_doors_ajax.twig.ajax_filter_extension.class: ITDoors\AjaxBundle\Twig\AjaxFilterExtention
+    it_doors_ajax.twig.ajax_filter_extension.class: ITDoors\AjaxBundle\Twig\AjaxFilterExtension
+    it_doors_ajax.twig.ajax_form_extension.class: ITDoors\AjaxBundle\Twig\AjaxFormExtension
 
 services:
     it_doors_ajax.twig.ajax_filter_extension:
         class: %it_doors_ajax.twig.ajax_filter_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+
+    it_doors_ajax.twig.ajax_form_extension:
+        class: %it_doors_ajax.twig.ajax_form_extension.class%
         arguments: [@service_container]
         tags:
             - { name: twig.extension }
