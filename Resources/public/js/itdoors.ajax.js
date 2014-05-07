@@ -4,6 +4,8 @@ var ITDoorsAjax = (function() {
         ajaxFormClass: 'itdoors-ajax-form',
         ajaxFormBtnClass: 'itdoors-ajax-form-btn',
         ajaxFilterFormClass: 'ajax-filter-form',
+        ajaxPaginationClass: 'it-doors-ajax-pagination-class',
+        ajaxPaginationHolder: 'it-doors-pagination-holder',
         shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'itdoors-select2',
@@ -35,6 +37,8 @@ var ITDoorsAjax = (function() {
         this.initDateRange();
 
         this.initDateRangeCustom();
+
+        this.initAjaxPagination();
     }
 
     ITDoorsAjax.prototype.initSelect2 = function()
@@ -518,5 +522,92 @@ var ITDoorsAjax = (function() {
         });
     }
 
+    ITDoorsAjax.prototype.initAjaxPagination = function()
+    {
+        var selfClass = this;
+        $('.' + selfClass.params.ajaxPaginationClass).live('click', function(e){
+            e.preventDefault();
+
+            var page = $(this).data('page');
+
+            var parentHolder = $(this).parents('.'+selfClass.params.ajaxPaginationHolder);
+
+            console.log(page);
+            var url = parentHolder.data('url');
+            var paginationNamespace = parentHolder.data('pagination_namespace');
+
+            console.log(paginationNamespace);
+
+            $target = parentHolder;
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: url,
+                data: {
+                    page: page,
+                    paginationNamespace: paginationNamespace
+                },
+                beforeSend: function() {
+                    console.log('before send');
+                    if (!$target.html()) {
+                        $target.show();
+                        $target.html(params.loadingText);
+                    }
+                    $target.show();
+                    selfClass.blockUI($target);
+                },
+
+                success: function(response) {
+                    selfClass.unblockUI($target);
+
+                    var successFunctions = parentHolder.data('success');
+
+                    if (successFunctions){
+                        for (key in successFunctions) {
+                            var successFunction = successFunctions[key].split('.');
+
+                            if (successFunction[0] && successFunction[1]) {
+                                if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                                    formok = window[successFunction[0]][successFunction[1]](key);
+                                }
+                            }
+                            else {
+                                if (typeof window[successFunctions[key]] === 'function'){
+                                    formok = window[successFunctions[key]](key);
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+            });
+
+
+
+            var successFunctions = parentHolder.data('success');
+
+            if (successFunctions){
+                for (key in successFunctions) {
+                    var successFunction = successFunctions[key].split('.');
+
+                    if (successFunction[0] && successFunction[1]) {
+                        if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                            formok = window[successFunction[0]][successFunction[1]](key);
+                        }
+                    }
+                    else {
+                        if (typeof window[successFunctions[key]] === 'function'){
+                            formok = window[successFunctions[key]](key);
+                        }
+                    }
+                }
+            }
+
+
+
+        })
+    }
     return new ITDoorsAjax();
 })();

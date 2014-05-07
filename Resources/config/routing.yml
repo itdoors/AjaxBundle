@@ -5,3 +5,7 @@ it_doors_ajax_filter:
 it_doors_ajax_form:
     pattern:  itdoors/ajax/form
     defaults: { _controller: ITDoorsAjaxBundle:Form:index }
+
+it_doors_ajax_paginator:
+    pattern:  itdoors/ajax/paginator
+    defaults: { _controller: ITDoorsAjaxBundle:Paginator:index }
