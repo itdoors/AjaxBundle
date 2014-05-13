@@ -92,8 +92,7 @@ var ITDoorsAjax = (function() {
 
                     self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
 
-                    if ($form.hasClass(selfClass.params.shortFormClass))
-                    {
+                    if ($form.hasClass(selfClass.params.shortFormClass)) {
                         $form.trigger('change');
                     }
                 }
@@ -168,8 +167,7 @@ var ITDoorsAjax = (function() {
 
                     self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
 
-                    if ($form.hasClass(selfClass.params.shortFormClass))
-                    {
+                    if ($form.hasClass(selfClass.params.shortFormClass)) {
                         $form.trigger('change');
                     }
                 }
@@ -237,18 +235,15 @@ var ITDoorsAjax = (function() {
 
         var $selector = $(selector);
 
-        if (!defaultParams)
-        {
+        if (!defaultParams) {
             defaultParams = {};
         }
 
-        if (!$selector.length)
-        {
+        if (!$selector.length) {
             return false;
         }
 
-        if (!$.isFunction($.fn.select2))
-        {
+        if (!$.isFunction($.fn.select2)) {
             return false;
         }
 
@@ -270,8 +265,7 @@ var ITDoorsAjax = (function() {
             params.data = choices;
         }
 
-        if (url)
-        {
+        if (url) {
             params.ajax = {
                 url: url,
                 dataType: 'json',
@@ -289,8 +283,7 @@ var ITDoorsAjax = (function() {
             }
         }
 
-        if (urlById)
-        {
+        if (urlById) {
             params.initSelection = function (element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
@@ -314,22 +307,16 @@ var ITDoorsAjax = (function() {
         var selfClass = this;
 
         form.find('.' + selfClass.params.canBeResetedClass).each(function(index){
-            if ($(this).hasClass(selfClass.params.select2Class))
-            {
+            if ($(this).hasClass(selfClass.params.select2Class)) {
                 $(this).select2('data', null);
             }
 
-            if ($(this).hasClass(selfClass.params.daterangeStartClass) ||
-                $(this).hasClass(selfClass.params.daterangeEndClass) ||
-                $(this).hasClass(selfClass.params.daterangeTextClass))
-            {
+            if ($(this).hasClass(selfClass.params.daterangeStartClass) || $(this).hasClass(selfClass.params.daterangeEndClass) || $(this).hasClass(selfClass.params.daterangeTextClass)) {
                 $(this).val('');
             }
 
-            if ($(this).attr('type') == 'checkbox')
-            {
-                if ($(this).is(':checked'))
-                {
+            if ($(this).attr('type') == 'checkbox') {
+                if ($(this).is(':checked')) {
                     $(this).trigger('click');
                 }
             }
@@ -372,26 +359,23 @@ var ITDoorsAjax = (function() {
 
                     selfClass.unblockUI(self);
 
-                    if (response.error)
-                    {
+                    if (response.error) {
                         return;
                     }
 
-                    if (response.success)
-                    {
-                        if (response.successFunctions){
+                    if (response.success) {
+                        if (response.successFunctions) {
                             var successFunctions = JSON.parse(response.successFunctions);
 
                             for (key in successFunctions) {
                                 var successFunction = successFunctions[key].split('.');
 
                                 if (successFunction[0] && successFunction[1]) {
-                                    if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                                    if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
                                         formok = window[successFunction[0]][successFunction[1]](key);
                                     }
-                                }
-                                else {
-                                    if (typeof window[successFunctions[key]] === 'function'){
+                                } else {
+                                    if (typeof window[successFunctions[key]] === 'function') {
                                         formok = window[successFunctions[key]](key);
                                     }
                                 }
@@ -483,13 +467,11 @@ var ITDoorsAjax = (function() {
 
                     selfClass.unblockUI(self);
 
-                    if (response.error)
-                    {
+                    if (response.error) {
                         return;
                     }
 
-                    if (response.success)
-                    {
+                    if (response.success) {
                         var params = JSON.parse(response.params);
 
                         var $selector = $(params.selector);
@@ -498,19 +480,18 @@ var ITDoorsAjax = (function() {
                         $selector.fadeIn();
                         $target.html('');
 
-                        if (params.successFunctions){
+                        if (params.successFunctions) {
                             var successFunctions = params.successFunctions;
 
                             for (key in successFunctions) {
                                 var successFunction = successFunctions[key].split('.');
 
                                 if (successFunction[0] && successFunction[1]) {
-                                    if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                                    if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
                                         formok = window[successFunction[0]][successFunction[1]](key);
                                     }
-                                }
-                                else {
-                                    if (typeof window[successFunctions[key]] === 'function'){
+                                } else {
+                                    if (typeof window[successFunctions[key]] === 'function') {
                                         formok = window[successFunctions[key]](key);
                                     }
                                 }
@@ -562,17 +543,16 @@ var ITDoorsAjax = (function() {
 
                     var successFunctions = parentHolder.data('success');
 
-                    if (successFunctions){
+                    if (successFunctions) {
                         for (key in successFunctions) {
                             var successFunction = successFunctions[key].split('.');
 
                             if (successFunction[0] && successFunction[1]) {
-                                if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                                if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
                                     formok = window[successFunction[0]][successFunction[1]](key);
                                 }
-                            }
-                            else {
-                                if (typeof window[successFunctions[key]] === 'function'){
+                            } else {
+                                if (typeof window[successFunctions[key]] === 'function') {
                                     formok = window[successFunctions[key]](key);
                                 }
                             }
@@ -588,17 +568,16 @@ var ITDoorsAjax = (function() {
 
             var successFunctions = parentHolder.data('success');
 
-            if (successFunctions){
+            if (successFunctions) {
                 for (key in successFunctions) {
                     var successFunction = successFunctions[key].split('.');
 
                     if (successFunction[0] && successFunction[1]) {
-                        if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function'){
+                        if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
                             formok = window[successFunction[0]][successFunction[1]](key);
                         }
-                    }
-                    else {
-                        if (typeof window[successFunctions[key]] === 'function'){
+                    } else {
+                        if (typeof window[successFunctions[key]] === 'function') {
                             formok = window[successFunctions[key]](key);
                         }
                     }
