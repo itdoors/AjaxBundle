@@ -1,5 +1,6 @@
 <?php
 namespace ITDoors\AjaxBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +35,7 @@ class FormController extends Controller
             $return['params'] = json_encode($params);
 
             $this->saveForm($form, $request, $params);
-        }
-        else {
+        } else {
             $return['error'] = true;
             $return['content'] = $this->renderView('ITDoorsAjaxBundle:Form:ajaxForm.html.twig', array(
                 'form' => $form->createView(),
@@ -97,5 +97,4 @@ class FormController extends Controller
             }
         }
     }
-
 }
