@@ -15,6 +15,7 @@ class BaseFilterController extends Controller
     const FILTER_KEY = 'filter';
     const ORDER_KEY = 'order';
     const PAGINATOR_KEY = 'paginator';
+    const TAB_KEY = 'tab';
     protected $filterNamespace = 'ajax.default.namespace';
     protected $filterFormName = 'baseSalesFilterForm';
     protected $baseRoute = 'lists_sales_base_index';
@@ -288,6 +289,78 @@ class BaseFilterController extends Controller
     public function getPaginatorValueByKey($key, $default = null, $filterNamespace = '')
     {
         $this->getSessionValueByKey($key, $default, $filterNamespace, self::PAGINATOR_KEY);
+    }
+
+    /////////////////////////tab functions////////////////////////////////
+
+    /**
+     * setTab into the session with namespace as a key
+     *
+     * @param string  $filterNamespace
+     * @param mixed[] $data
+     */
+
+    public function setTab($filterNamespace = '', $data = array())
+    {
+        $this -> setSessionValues($filterNamespace, $data, self::TAB_KEY);
+    }
+
+    /**
+     * Get filter from session
+     *
+     * @param string $filterNamespace
+     *
+     * @return mixed
+     */
+    public function getTab($filterNamespace = '')
+    {
+        return $this->getSessionValues($filterNamespace, self::TAB_KEY);
+    }
+
+    /**
+     * Clear filters of type
+     *
+     * @param string $filterNamespace
+     */
+    public function clearTab($filterNamespace = '')
+    {
+        $this->clearSessionValues($filterNamespace, self::TAB_KEY);
+    }
+
+    /**
+     * Adds record to session
+     *
+     * @param string $key
+     * @param string $value
+     */
+    public function addToTab($key, $value)
+    {
+        $this->addToSessionValues($key, $value, self::TAB_KEY);
+    }
+
+    /**
+     * Removes record from session by key
+     *
+     * @param string $key
+     * @param string $filterNamespace
+     */
+    public function removeFromTab($key, $filterNamespace = '')
+    {
+        $this->removeFromSessionValues($key, $filterNamespace, self::TAB_KEY);
+    }
+
+    /**
+     * Returns filter value by key
+     *
+     * @param string $key
+     * @param string $default
+     * @param string $filterNamespace
+     *
+     * @return mixed
+     */
+    public function getTabValueByKey($key, $default = null, $filterNamespace = '')
+    {
+        $this->getSessionValueByKey($key, $default, $filterNamespace, self::TAB_KEY);
     }
 
     /////////////////////////order functions////////////////////////////////

@@ -11,8 +11,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  * Generates ajax paginator
  */
-class PaginatorController extends BaseFilterController
+class TabController extends BaseFilterController
 {
+
     /**
      * indexAction
      *
@@ -20,13 +21,15 @@ class PaginatorController extends BaseFilterController
      *
      * @return string
      */
-    public function indexAction(Request $request)
+    public function indexAction (Request $request)
     {
-        $page = $request->request->get('page');
 
-        $paginationNamespace = $request->request->get('paginationNamespace');
+        $tabNamespace = $request->request->get ('tabNamespace');
+        
 
-        $this->setPaginator($paginationNamespace, $page);
+        $tab = $request->request->get ('tab');
+
+        $this->setTab ($tabNamespace, $tab);
 
         $result = array(
             'html' => '',
@@ -34,6 +37,7 @@ class PaginatorController extends BaseFilterController
             'success' => true,
         );
 
-        return new Response(json_encode($result));
+        return new Response (json_encode ($result));
     }
+
 }
