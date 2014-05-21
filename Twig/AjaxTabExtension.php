@@ -1,8 +1,6 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
-use Knp\Bundle\PaginatorBundle\Twig\Extension\PaginationExtension;
-use Knp\Bundle\PaginatorBundle\Helper\Processor;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -11,7 +9,7 @@ use Symfony\Component\DependencyInjection\Container;
  * @author Denys Lishchenko <silence4r4@mail.ru>
  *
  */
-class AjaxPaginatorExtension extends \Twig_Extension
+class AjaxTabExtension extends \Twig_Extension
 {
     /**
      * @var \Twig_Environment
@@ -47,7 +45,7 @@ class AjaxPaginatorExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ajax_paginator_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'ajax_tab_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
         );
     }
 
@@ -61,18 +59,18 @@ class AjaxPaginatorExtension extends \Twig_Extension
      * @return string
      */
     public function render(
-        $pagination,
-        $paginationNamespace = '',
-        $successFunctions = '',
-        $template = "ITDoorsCommonBundle:AjaxPagination:sliding.html.twig"
+        $tabs,
+        $tab,
+        $tabNamespace = '',
+        $template = "ITDoorsCommonBundle:AjaxTab:tab.html.twig"
     )
     {
-        $data = $pagination->getPaginationData();
+        
+        $data =array() ;
+        $data['tabs'] = $tabs;
+        $data['tab'] = $tab;
+        $data['tabNamespace'] = $tabNamespace;
 
-        $data['route'] = $pagination->getRoute();
-        $data['query'] = $pagination->getParams();
-        $data['successFunctions'] = $successFunctions;
-        $data['paginationNamespace'] = $paginationNamespace;
         return $this->environment->render($template, $data);
     }
 
@@ -81,7 +79,7 @@ class AjaxPaginatorExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'ajax_paginator';
+        return 'ajax_tab';
     }
 
 }

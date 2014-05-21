@@ -2,6 +2,7 @@ parameters:
     it_doors_ajax.twig.ajax_filter_extension.class: ITDoors\AjaxBundle\Twig\AjaxFilterExtension
     it_doors_ajax.twig.ajax_form_extension.class: ITDoors\AjaxBundle\Twig\AjaxFormExtension
     it_doors_ajax.twig.ajax_paginator_extension.class: ITDoors\AjaxBundle\Twig\AjaxPaginatorExtension
+    it_doors_ajax.twig.ajax_tab_extension.class: ITDoors\AjaxBundle\Twig\AjaxTabExtension
 
 services:
     it_doors_ajax.twig.ajax_filter_extension:
@@ -18,6 +19,12 @@ services:
 
     it_doors_ajax.twig.ajax_paginator_extension:
         class: %it_doors_ajax.twig.ajax_paginator_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+            
+    it_doors_ajax.twig.ajax_tab_extension:
+        class: %it_doors_ajax.twig.ajax_tab_extension.class%
         arguments: [@service_container]
         tags:
             - { name: twig.extension }
