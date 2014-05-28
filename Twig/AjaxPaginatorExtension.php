@@ -1,8 +1,8 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
-use Knp\Bundle\PaginatorBundle\Twig\Extension\PaginationExtension;
-use Knp\Bundle\PaginatorBundle\Helper\Processor;
+
+use Knp\Component\Pager\Pagination\SlidingPagination;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -52,27 +52,30 @@ class AjaxPaginatorExtension extends \Twig_Extension
     }
 
     /**
-     * Renders the pagination template
-     *
-     * @param string $template
-     * @param array $queryParams
-     * @param array $viewParams
+     * @param SlidingPagination $pagination
+     * @param string            $paginationNamespace
+     * @param string            $successFunctions
+     * @param string            $template
      *
      * @return string
      */
-    public function render(
+    public function render
+    (
         $pagination,
         $paginationNamespace = '',
         $successFunctions = '',
         $template = "ITDoorsCommonBundle:AjaxPagination:sliding.html.twig"
+    // @codingStandardsIgnoreStart
     )
     {
+    // @codingStandardsIgnoreEnd
         $data = $pagination->getPaginationData();
 
         $data['route'] = $pagination->getRoute();
         $data['query'] = $pagination->getParams();
         $data['successFunctions'] = $successFunctions;
         $data['paginationNamespace'] = $paginationNamespace;
+
         return $this->environment->render($template, $data);
     }
 
@@ -83,5 +86,4 @@ class AjaxPaginatorExtension extends \Twig_Extension
     {
         return 'ajax_paginator';
     }
-
 }
