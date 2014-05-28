@@ -13,3 +13,4 @@ it_doors_ajax_paginator:
 it_doors_ajax_tab:
     pattern:  itdoors/ajax/tab
     defaults: { _controller: ITDoorsAjaxBundle:Tab:index }
+

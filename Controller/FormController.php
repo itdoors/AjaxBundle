@@ -13,6 +13,10 @@ class FormController extends Controller
 {
     /**
      * Index action
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -49,7 +53,7 @@ class FormController extends Controller
     /**
      * Set form default values
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $params
      */
     public function setDefaults(Form $form, $params)
@@ -81,7 +85,7 @@ class FormController extends Controller
     /**
      * Saves form
      *
-     * @param Form $form
+     * @param Form    $form
      * @param Request $request
      * @param mixed[] $params
      */

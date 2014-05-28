@@ -1,6 +1,7 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -47,8 +48,10 @@ class AjaxFilterExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ajax_filter_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
-            'ajax_filter_render_short' => new \Twig_Function_Method($this, 'renderShort', array('is_safe' => array('html')))
+            'ajax_filter_render' =>
+                new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'ajax_filter_render_short' =>
+                new \Twig_Function_Method($this, 'renderShort', array('is_safe' => array('html')))
         );
     }
 
