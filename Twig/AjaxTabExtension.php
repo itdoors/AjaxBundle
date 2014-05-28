@@ -1,6 +1,7 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -50,11 +51,10 @@ class AjaxTabExtension extends \Twig_Extension
     }
 
     /**
-     * Renders the pagination template
-     *
-     * @param string $template
-     * @param array $queryParams
-     * @param array $viewParams
+     * @param mixed[] $tabs
+     * @param string  $tab
+     * @param string  $tabNamespace
+     * @param string  $template
      *
      * @return string
      */
@@ -63,9 +63,10 @@ class AjaxTabExtension extends \Twig_Extension
         $tab,
         $tabNamespace = '',
         $template = "ITDoorsCommonBundle:AjaxTab:tab.html.twig"
+    // @codingStandardsIgnoreStart
     )
     {
-        
+    // @codingStandardsIgnoreEnd
         $data =array() ;
         $data['tabs'] = $tabs;
         $data['tab'] = $tab;
@@ -81,5 +82,4 @@ class AjaxTabExtension extends \Twig_Extension
     {
         return 'ajax_tab';
     }
-
 }

@@ -21,15 +21,13 @@ class TabController extends BaseFilterController
      *
      * @return string
      */
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
+        $tabNamespace = $request->request->get('tabNamespace');
 
-        $tabNamespace = $request->request->get ('tabNamespace');
-        
+        $tab = $request->request->get('tab');
 
-        $tab = $request->request->get ('tab');
-
-        $this->setTab ($tabNamespace, $tab);
+        $this->setTab($tabNamespace, $tab);
 
         $result = array(
             'html' => '',
@@ -37,7 +35,6 @@ class TabController extends BaseFilterController
             'success' => true,
         );
 
-        return new Response (json_encode ($result));
+        return new Response(json_encode($result));
     }
-
 }
