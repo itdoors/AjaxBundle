@@ -44,7 +44,7 @@ class FilterController extends Controller
             'html' => '',
             'error' => false,
             'success' => true,
-            'successFunctions' => isset($requestData['successFunctions']) ? $requestData['successFunctions'] : array()
+            'successFunctions' => isset($requestData['successFunctions']) ? stripslashes($requestData['successFunctions']) : array()
         );
 
         return new Response(json_encode($result));
