@@ -20,7 +20,7 @@ class FormController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $params = json_decode($request->request->get('params'), true);
+        $params = json_decode(stripslashes($request->request->get('params')), true);
 
         $form = $this->createForm($params['formType']);
 
@@ -34,9 +34,10 @@ class FormController extends Controller
             'success' => false
         );
 
+        $return['params'] = json_encode($params);
+
         if ($form->isValid()) {
             $return['success'] = true;
-            $return['params'] = json_encode($params);
 
             $this->saveForm($form, $request, $params);
         } else {

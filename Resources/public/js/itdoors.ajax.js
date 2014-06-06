@@ -474,15 +474,17 @@ var ITDoorsAjax = (function() {
 
                     selfClass.unblockUI(self);
 
+                    var params = JSON.parse(response.params);
+
+                    var $target = $(params.target);
+
                     if (response.error) {
+                        $target.html(response.content);
                         return;
                     }
 
                     if (response.success) {
-                        var params = JSON.parse(response.params);
-
                         var $selector = $(params.selector);
-                        var $target = $(params.target);
 
                         $selector.fadeIn();
                         $target.html('');
