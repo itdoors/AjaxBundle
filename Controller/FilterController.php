@@ -40,11 +40,15 @@ class FilterController extends Controller
             $this->setFilters($requestData['filterNamespace'], $data);
         }
 
+        $successFunctions = isset($requestData['successFunctions']) ?
+            stripslashes($requestData['successFunctions']) :
+            array();
+
         $result = array(
             'html' => '',
             'error' => false,
             'success' => true,
-            'successFunctions' => isset($requestData['successFunctions']) ? stripslashes($requestData['successFunctions']) : array()
+            'successFunctions' => $successFunctions
         );
 
         return new Response(json_encode($result));
