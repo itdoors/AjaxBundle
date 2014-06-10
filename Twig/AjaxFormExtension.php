@@ -1,6 +1,7 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -111,7 +112,7 @@ class AjaxFormExtension extends \Twig_Extension
     /**
      * Adds default options like url
      *
-     * @param mixed[] $options
+     * @param mixed[] &$options
      */
     public function addDefaultOptions(&$options)
     {
