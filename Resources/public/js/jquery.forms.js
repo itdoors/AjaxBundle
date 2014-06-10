@@ -75,11 +75,13 @@
 // contains inputs with names like "action" or "method"; in those
 // cases "prop" returns the element
     $.fn.attr2 = function() {
-        if ( ! hasProp )
+        if ( ! hasProp ) {
             return this.attr.apply(this, arguments);
+        }
         var val = this.prop.apply(this, arguments);
-        if ( ( val && val.jquery ) || typeof val === 'string' )
+        if ( ( val && val.jquery ) || typeof val === 'string' ) {
             return val;
+        }
         return this.attr.apply(this, arguments);
     };
 
@@ -100,8 +102,7 @@
 
         if (typeof options == 'function') {
             options = { success: options };
-        }
-        else if ( options === undefined ) {
+        } else if ( options === undefined ) {
             options = {};
         }
 
@@ -169,8 +170,7 @@
         if (options.type.toUpperCase() == 'GET') {
             options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
             options.data = null;  // data is null for 'get'
-        }
-        else {
+        } else {
             options.data = q; // data is the query string for 'post'
         }
 
@@ -189,8 +189,7 @@
                 var fn = options.replaceTarget ? 'replaceWith' : 'html';
                 $(options.target)[fn](data).each(oldSuccess, arguments);
             });
-        }
-        else if (options.success) {
+        } else if (options.success) {
             callbacks.push(options.success);
         }
 
@@ -242,23 +241,21 @@
                 $.get(options.closeKeepAlive, function() {
                     jqxhr = fileUploadIframe(a);
                 });
-            }
-            else {
+            } else {
                 jqxhr = fileUploadIframe(a);
             }
-        }
-        else if ((hasFileInputs || multipart) && fileAPI) {
+        } else if ((hasFileInputs || multipart) && fileAPI) {
             jqxhr = fileUploadXhr(a);
-        }
-        else {
+        } else {
             jqxhr = $.ajax(options);
         }
 
         $form.removeData('jqxhr').data('jqxhr', jqxhr);
 
         // clear element array
-        for (var k=0; k < elements.length; k++)
+        for (var k=0; k < elements.length; k++) {
             elements[k] = null;
+        }
 
         // fire 'notify' event
         this.trigger('form-submit-notify', [this, options]);
@@ -290,9 +287,11 @@
 
             if (options.extraData) {
                 var serializedData = deepSerialize(options.extraData);
-                for (i=0; i < serializedData.length; i++)
-                    if (serializedData[i])
+                for (i=0; i < serializedData.length; i++) {
+                    if (serializedData[i]) {
                         formdata.append(serializedData[i][0], serializedData[i][1]);
+                    }
+                }
             }
 
             options.data = null;
@@ -327,12 +326,14 @@
             var beforeSend = s.beforeSend;
             s.beforeSend = function(xhr, o) {
                 //Send FormData() provided by user
-                if (options.formData)
+                if (options.formData) {
                     o.data = options.formData;
-                else
+                } else {
                     o.data = formdata;
-                if(beforeSend)
+                }
+                if (beforeSend) {
                     beforeSend.call(this, xhr, o);
+                }
             };
             return $.ajax(s);
         }
@@ -351,10 +352,11 @@
                 // ensure that every serialized input is still enabled
                 for (i=0; i < elements.length; i++) {
                     el = $(elements[i]);
-                    if ( hasProp )
+                    if ( hasProp ) {
                         el.prop('disabled', false);
-                    else
+                    } else {
                         el.removeAttr('disabled');
+                    }
                 }
             }
 
@@ -364,12 +366,12 @@
             if (s.iframeTarget) {
                 $io = $(s.iframeTarget);
                 n = $io.attr2('name');
-                if (!n)
+                if (!n) {
                     $io.attr2('name', id);
-                else
+                } else {
                     id = n;
-            }
-            else {
+                }
+            } else {
                 $io = $('<iframe name="' + id + '" src="'+ s.iframeSrc +'" />');
                 $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
             }
@@ -390,21 +392,26 @@
                     log('aborting upload... ' + e);
                     this.aborted = 1;
 
-                    try { // #214, #257
+                    try {
+                        // #214, #257
                         if (io.contentWindow.document.execCommand) {
                             io.contentWindow.document.execCommand('Stop');
                         }
+                    } catch (ignore) {
+
                     }
-                    catch(ignore) {}
 
                     $io.attr('src', s.iframeSrc); // abort op in progress
                     xhr.error = e;
-                    if (s.error)
+                    if (s.error) {
                         s.error.call(s.context, xhr, e, status);
-                    if (g)
+                    }
+                    if (g) {
                         $.event.trigger("ajaxError", [xhr, s, e]);
-                    if (s.complete)
+                    }
+                    if (s.complete) {
                         s.complete.call(s.context, xhr, e);
+                    }
                 }
             };
 
@@ -461,7 +468,7 @@
                     if (frame.contentWindow) {
                         doc = frame.contentWindow.document;
                     }
-                } catch(err) {
+                } catch (err) {
                     // IE8 access denied under ssl & missing protocol
                     log('cannot get iframe.contentWindow document: ' + err);
                 }
@@ -470,9 +477,10 @@
                     return doc;
                 }
 
-                try { // simply checking may throw in ie8 under ssl or mismatched protocol
+                try {
+                    // simply checking may throw in ie8 under ssl or mismatched protocol
                     doc = frame.contentDocument ? frame.contentDocument : frame.document;
-                } catch(err) {
+                } catch (err) {
                     // last attempt
                     log('cannot get iframe.contentDocument: ' + err);
                     doc = frame.document;
@@ -520,14 +528,15 @@
                     try {
                         var state = getDoc(io).readyState;
                         log('state = ' + state);
-                        if (state && state.toLowerCase() == 'uninitialized')
+                        if (state && state.toLowerCase() == 'uninitialized') {
                             setTimeout(checkState,50);
-                    }
-                    catch(e) {
+                        }
+                    } catch (e) {
                         log('Server abort: ' , e, ' (', e.name, ')');
                         cb(SERVER_ABORT);
-                        if (timeoutHandle)
+                        if (timeoutHandle) {
                             clearTimeout(timeoutHandle);
+                        }
                         timeoutHandle = undefined;
                     }
                 }
@@ -539,7 +548,7 @@
                         for (var n in s.extraData) {
                             if (s.extraData.hasOwnProperty(n)) {
                                 // if using the $.param format that allows for multiple values with the same name
-                                if($.isPlainObject(s.extraData[n]) && s.extraData[n].hasOwnProperty('name') && s.extraData[n].hasOwnProperty('value')) {
+                                if ($.isPlainObject(s.extraData[n]) && s.extraData[n].hasOwnProperty('name') && s.extraData[n].hasOwnProperty('value')) {
                                     extraInputs.push(
                                         $('<input type="hidden" name="'+s.extraData[n].name+'">').val(s.extraData[n].value)
                                             .appendTo(form)[0]);
@@ -556,15 +565,15 @@
                         // add iframe to doc and submit the form
                         $io.appendTo('body');
                     }
-                    if (io.attachEvent)
+                    if (io.attachEvent) {
                         io.attachEvent('onload', cb);
-                    else
+                    } else {
                         io.addEventListener('load', cb, false);
+                    }
                     setTimeout(checkState,15);
 
                     try {
-                        form.submit();
-                    } catch(err) {
+                        form.submit();} catch (err) {
                         // just in case form has element with name/id of 'submit'
                         var submitFn = document.createElement('form').submit;
                         submitFn.apply(form);
@@ -573,7 +582,7 @@
                 finally {
                     // reset attrs and remove "extra" input elements
                     form.setAttribute('action',a);
-                    if(t) {
+                    if (t) {
                         form.setAttribute('target', t);
                     } else {
                         $form.removeAttr('target');
@@ -584,8 +593,7 @@
 
             if (s.forceSync) {
                 doSubmit();
-            }
-            else {
+            } else {
                 setTimeout(doSubmit, 10); // this lets dom updates render
             }
 
@@ -597,7 +605,7 @@
                 }
 
                 doc = getDoc(io);
-                if(!doc) {
+                if (!doc) {
                     log('cannot access response document');
                     e = SERVER_ABORT;
                 }
@@ -605,8 +613,7 @@
                     xhr.abort('timeout');
                     deferred.reject(xhr, 'timeout');
                     return;
-                }
-                else if (e == SERVER_ABORT && xhr) {
+                } else if (e == SERVER_ABORT && xhr) {
                     xhr.abort('server abort');
                     deferred.reject(xhr, 'error', 'server abort');
                     return;
@@ -614,13 +621,15 @@
 
                 if (!doc || doc.location.href == s.iframeSrc) {
                     // response not received yet
-                    if (!timedOut)
+                    if (!timedOut) {
                         return;
+                    }
                 }
-                if (io.detachEvent)
+                if (io.detachEvent) {
                     io.detachEvent('onload', cb);
-                else
+                } else {
                     io.removeEventListener('load', cb, false);
+                }
 
                 var status = 'success', errMsg;
                 try {
@@ -647,8 +656,9 @@
                     var docRoot = doc.body ? doc.body : doc.documentElement;
                     xhr.responseText = docRoot ? docRoot.innerHTML : null;
                     xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
-                    if (isXml)
+                    if (isXml) {
                         s.dataType = 'xml';
+                    }
                     xhr.getResponseHeader = function(header){
                         var headers = {'content-type': s.dataType};
                         return headers[header.toLowerCase()];
@@ -669,32 +679,26 @@
                             // support for XHR 'status' & 'statusText' emulation :
                             xhr.status = Number( ta.getAttribute('status') ) || xhr.status;
                             xhr.statusText = ta.getAttribute('statusText') || xhr.statusText;
-                        }
-                        else if (scr) {
+                        } else if (scr) {
                             // account for browsers injecting pre around json response
                             var pre = doc.getElementsByTagName('pre')[0];
                             var b = doc.getElementsByTagName('body')[0];
                             if (pre) {
                                 xhr.responseText = pre.textContent ? pre.textContent : pre.innerText;
-                            }
-                            else if (b) {
+                            } else if (b) {
                                 xhr.responseText = b.textContent ? b.textContent : b.innerText;
                             }
                         }
-                    }
-                    else if (dt == 'xml' && !xhr.responseXML && xhr.responseText) {
+                    } else if (dt == 'xml' && !xhr.responseXML && xhr.responseText) {
                         xhr.responseXML = toXml(xhr.responseText);
                     }
 
                     try {
-                        data = httpData(xhr, dt, s);
-                    }
-                    catch (err) {
+                        data = httpData(xhr, dt, s); } catch (err) {
                         status = 'parsererror';
                         xhr.error = errMsg = (err || status);
                     }
-                }
-                catch (err) {
+                } catch (err) {
                     log('error caught: ',err);
                     status = 'error';
                     xhr.error = errMsg = (err || status);
@@ -711,42 +715,47 @@
 
                 // ordering of these callbacks/triggers is odd, but that's how $.ajax does it
                 if (status === 'success') {
-                    if (s.success)
+                    if (s.success) {
                         s.success.call(s.context, data, 'success', xhr);
+                    }
                     deferred.resolve(xhr.responseText, 'success', xhr);
-                    if (g)
+                    if (g) {
                         $.event.trigger("ajaxSuccess", [xhr, s]);
-                }
-                else if (status) {
-                    if (errMsg === undefined)
+                    }
+                } else if (status) {
+                    if (errMsg === undefined) {
                         errMsg = xhr.statusText;
-                    if (s.error)
+                    }
+                    if (s.error) {
                         s.error.call(s.context, xhr, status, errMsg);
+                    }
                     deferred.reject(xhr, 'error', errMsg);
-                    if (g)
+                    if (g) {
                         $.event.trigger("ajaxError", [xhr, s, errMsg]);
+                    }
                 }
 
-                if (g)
+                if (g) {
                     $.event.trigger("ajaxComplete", [xhr, s]);
-
+                }
                 if (g && ! --$.active) {
                     $.event.trigger("ajaxStop");
                 }
 
-                if (s.complete)
+                if (s.complete) {
                     s.complete.call(s.context, xhr, status);
-
+                }
                 callbackProcessed = true;
-                if (s.timeout)
+                if (s.timeout) {
                     clearTimeout(timeoutHandle);
-
+                }
                 // clean up
                 setTimeout(function() {
-                    if (!s.iframeTarget)
+                    if (!s.iframeTarget) {
                         $io.remove();
-                    else  //adding else to clean up existing iframe response.
+                    } else {//adding else to clean up existing iframe response.
                         $io.attr('src', s.iframeSrc);
+                    }
                     xhr.responseXML = null;
                 }, 100);
             }
@@ -756,8 +765,7 @@
                     doc = new ActiveXObject('Microsoft.XMLDOM');
                     doc.async = 'false';
                     doc.loadXML(s);
-                }
-                else {
+                } else {
                     doc = (new DOMParser()).parseFromString(s, 'text/xml');
                 }
                 return (doc && doc.documentElement && doc.documentElement.nodeName != 'parsererror') ? doc : null;
@@ -774,8 +782,9 @@
                     data = xml ? xhr.responseXML : xhr.responseText;
 
                 if (xml && data.documentElement.nodeName === 'parsererror') {
-                    if ($.error)
+                    if ($.error) {
                         $.error('parsererror');
+                    }
                 }
                 if (s && s.dataFilter) {
                     data = s.dataFilter(data, type);
@@ -913,7 +922,7 @@
         }
 
         var i,j,n,v,el,max,jmax;
-        for(i=0, max=els.length; i < max; i++) {
+        for (i=0, max=els.length; i < max; i++) {
             el = els[i];
             n = el.name;
             if (!n || el.disabled) {
@@ -922,7 +931,7 @@
 
             if (semantic && form.clk && el.type == "image") {
                 // handle image inputs on the fly when semantic == true
-                if(form.clk == el) {
+                if (form.clk == el) {
                     a.push({name: n, value: $(el).val(), type: el.type });
                     a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
                 }
@@ -931,29 +940,29 @@
 
             v = $.fieldValue(el, true);
             if (v && v.constructor == Array) {
-                if (elements)
+                if (elements) {
                     elements.push(el);
-                for(j=0, jmax=v.length; j < jmax; j++) {
+                }
+                for (j=0, jmax=v.length; j < jmax; j++) {
                     a.push({name: n, value: v[j]});
                 }
-            }
-            else if (feature.fileapi && el.type == 'file') {
-                if (elements)
+            } else if (feature.fileapi && el.type == 'file') {
+                if (elements) {
                     elements.push(el);
+                }
                 var files = el.files;
                 if (files.length) {
                     for (j=0; j < files.length; j++) {
                         a.push({name: n, value: files[j], type: el.type});
                     }
-                }
-                else {
+                } else {
                     // #180
                     a.push({ name: n, value: '', type: el.type });
                 }
-            }
-            else if (v !== null && typeof v != 'undefined') {
-                if (elements)
+            } else if (v !== null && typeof v != 'undefined') {
+                if (elements) {
                     elements.push(el);
+                }
                 a.push({name: n, value: v, type: el.type, required: el.required});
             }
         }
@@ -995,8 +1004,7 @@
                 for (var i=0,max=v.length; i < max; i++) {
                     a.push({name: n, value: v[i]});
                 }
-            }
-            else if (v !== null && typeof v != 'undefined') {
+            } else if (v !== null && typeof v != 'undefined') {
                 a.push({name: this.name, value: v});
             }
         });
@@ -1049,10 +1057,11 @@
             if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length)) {
                 continue;
             }
-            if (v.constructor == Array)
+            if (v.constructor == Array) {
                 $.merge(val, v);
-            else
+            } else {
                 val.push(v);
+            }
         }
         return val;
     };
@@ -1081,7 +1090,7 @@
             var a = [], ops = el.options;
             var one = (t == 'select-one');
             var max = (one ? index+1 : ops.length);
-            for(var i=(one ? index : 0); i < max; i++) {
+            for (var i=(one ? index : 0); i < max; i++) {
                 var op = ops[i];
                 if (op.selected) {
                     var v = op.value;
@@ -1122,28 +1131,24 @@
             var t = this.type, tag = this.tagName.toLowerCase();
             if (re.test(t) || tag == 'textarea') {
                 this.value = '';
-            }
-            else if (t == 'checkbox' || t == 'radio') {
+            } else if (t == 'checkbox' || t == 'radio') {
                 this.checked = false;
-            }
-            else if (tag == 'select') {
+            } else if (tag == 'select') {
                 this.selectedIndex = -1;
-            }
-            else if (t == "file") {
+            } else if (t == "file") {
                 if (/MSIE/.test(navigator.userAgent)) {
                     $(this).replaceWith($(this).clone(true));
                 } else {
                     $(this).val('');
                 }
-            }
-            else if (includeHidden) {
+            } else if (includeHidden) {
                 // includeHidden can be the value true, or it can be a selector string
                 // indicating a special test; for example:
                 //  $('#myForm').clearForm('.special:hidden')
                 // the above would clean hidden inputs that have the class of 'special'
-                if ( (includeHidden === true && /hidden/.test(t)) ||
-                    (typeof includeHidden == 'string' && $(this).is(includeHidden)) )
+                if ( (includeHidden === true && /hidden/.test(t)) || (typeof includeHidden == 'string' && $(this).is(includeHidden)) ) {
                     this.value = '';
+                }
             }
         });
     };
@@ -1185,8 +1190,7 @@
             var t = this.type;
             if (t == 'checkbox' || t == 'radio') {
                 this.checked = select;
-            }
-            else if (this.tagName.toLowerCase() == 'option') {
+            } else if (this.tagName.toLowerCase() == 'option') {
                 var $sel = $(this).parent('select');
                 if (select && $sel[0] && $sel[0].type == 'select-one') {
                     // deselect all other options
@@ -1202,13 +1206,13 @@
 
 // helper fn for console logging
     function log() {
-        if (!$.fn.ajaxSubmit.debug)
+        if (!$.fn.ajaxSubmit.debug) {
             return;
+        }
         var msg = '[jquery.form] ' + Array.prototype.join.call(arguments,'');
         if (window.console && window.console.log) {
             window.console.log(msg);
-        }
-        else if (window.opera && window.opera.postError) {
+        } else if (window.opera && window.opera.postError) {
             window.opera.postError(msg);
         }
     }

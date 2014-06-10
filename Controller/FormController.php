@@ -1,5 +1,6 @@
 <?php
 namespace ITDoors\AjaxBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,10 @@ class FormController extends Controller
 {
     /**
      * Index action
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -34,8 +39,7 @@ class FormController extends Controller
             $return['params'] = json_encode($params);
 
             $this->saveForm($form, $request, $params);
-        }
-        else {
+        } else {
             $return['error'] = true;
             $return['content'] = $this->renderView('ITDoorsAjaxBundle:Form:ajaxForm.html.twig', array(
                 'form' => $form->createView(),
@@ -49,7 +53,7 @@ class FormController extends Controller
     /**
      * Set form default values
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $params
      */
     public function setDefaults(Form $form, $params)
@@ -81,7 +85,7 @@ class FormController extends Controller
     /**
      * Saves form
      *
-     * @param Form $form
+     * @param Form    $form
      * @param Request $request
      * @param mixed[] $params
      */
@@ -97,5 +101,4 @@ class FormController extends Controller
             }
         }
     }
-
 }

@@ -329,6 +329,7 @@ var ITDoorsAjax = (function() {
 
         var $form = $('.' + selfClass.params.ajaxFilterFormClass)
 
+        $('.' + selfClass.params.ajaxFilterFormClass + ' .itdoors-filter-cancel-btn').die('click');
         $('.' + selfClass.params.ajaxFilterFormClass + ' .itdoors-filter-cancel-btn').live('click', function(e){
             e.preventDefault();
 
@@ -342,7 +343,7 @@ var ITDoorsAjax = (function() {
 
             resetField.val(0);
         });
-
+        $form.die('submit');
         $form.live('submit', function(e){
 
             e.preventDefault();
@@ -438,7 +439,7 @@ var ITDoorsAjax = (function() {
         var selfClass = this;
 
         var $form = $('.' + selfClass.params.ajaxFormClass)
-
+        $('.' + selfClass.params.ajaxFormClass + ' .itdoors-form-cancel-btn').die('click');
         $('.' + selfClass.params.ajaxFormClass + ' .itdoors-form-cancel-btn').live('click', function(e){
             e.preventDefault();
 
@@ -451,6 +452,7 @@ var ITDoorsAjax = (function() {
             $target.html('');
         });
 
+        $form.die('submit');
         $form.live('submit', function(e){
 
             e.preventDefault();
@@ -506,6 +508,7 @@ var ITDoorsAjax = (function() {
     ITDoorsAjax.prototype.initAjaxPagination = function()
     {
         var selfClass = this;
+        $('.' + selfClass.params.ajaxPaginationClass).die( "click" );
         $('.' + selfClass.params.ajaxPaginationClass).live('click', function(e){
             e.preventDefault();
 
@@ -563,26 +566,6 @@ var ITDoorsAjax = (function() {
 
 
             });
-
-
-
-            var successFunctions = parentHolder.data('success');
-
-            if (successFunctions) {
-                for (key in successFunctions) {
-                    var successFunction = successFunctions[key].split('.');
-
-                    if (successFunction[0] && successFunction[1]) {
-                        if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
-                            formok = window[successFunction[0]][successFunction[1]](key);
-                        }
-                    } else {
-                        if (typeof window[successFunctions[key]] === 'function') {
-                            formok = window[successFunctions[key]](key);
-                        }
-                    }
-                }
-            }
 
 
 

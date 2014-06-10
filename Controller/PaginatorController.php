@@ -4,14 +4,13 @@ namespace ITDoors\AjaxBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * PaginatorController class
  *
  * Generates ajax paginator
  */
-class PaginatorController extends FilterController
+class PaginatorController extends BaseFilterController
 {
     /**
      * indexAction
@@ -26,7 +25,7 @@ class PaginatorController extends FilterController
 
         $paginationNamespace = $request->request->get('paginationNamespace');
 
-        $this->setFilters($paginationNamespace, $page);
+        $this->setPaginator($paginationNamespace, $page);
 
         $result = array(
             'html' => '',

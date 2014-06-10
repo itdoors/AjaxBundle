@@ -1,9 +1,9 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Translation\Translator;
 
@@ -57,19 +57,20 @@ class AjaxFormExtension extends \Twig_Extension
     /**
      * Renders form for ajax submission
      *
+     *                         $options includes array(
+     *                         selector,       $(selector)     class name or id
+     *                         formType,       form type service alias
+     *                         saveService = array('serviceName' => 'saveMethod')
+     *                         successFunctions = array('targetId' => array('functionName1', 'functionName2'))
+     *                         errorFunctions = array('targetId' => array('functionName1', 'functionName2'))
+     *                         target          $(target)       selector where form will be generated
+     *                         isModal         default: false  open form in modal window
+     *                         )
+     *                         saveService          service alias
+     *                         $serviceName->$saveMethod(Form $form, Request $request)
+     *                         successFunctions     function that triggers when filter form is valid
+     *                         errorFunctions       function that triggers when filter form has errors
      * @param mixed[] $options
-     * Includes array(
-     *      selector,       $(selector)     class name or id
-     *      formType,       form type service alias
-     *      saveService = array('serviceName' => 'saveMethod')
-     *      successFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      errorFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      target          $(target)       selector where form will be generated
-     *      isModal         default: false  open form in modal window
-     * )
-     * saveService          service alias $serviceName->$saveMethod(Form $form, Request $request)
-     * successFunctions     function that triggers when filter form is valid
-     * errorFunctions       function that triggers when filter form has errors
      *
      * @return string
      */
@@ -83,19 +84,20 @@ class AjaxFormExtension extends \Twig_Extension
     /**
      * Prepares $(selector) for ajax form submission
      *
+     *                         $options includes array(
+     *                         selector,       $(selector)     class name or id
+     *                         formType,       form type service alias
+     *                         saveService = array('serviceName' => 'saveMethod')
+     *                         successFunctions = array('targetId' => array('functionName1', 'functionName2'))
+     *                         errorFunctions = array('targetId' => array('functionName1', 'functionName2'))
+     *                         target          $(target)       selector where form will be generated
+     *                         isModal         default: false  open form in modal window
+     *                         )
+     *                         saveService          service alias
+     *                         $serviceName->$saveMethod(Form $form, Request $request)
+     *                         successFunctions     function that triggers when filter form is valid
+     *                         errorFunctions       function that triggers when filter form has errors
      * @param mixed[] $options
-     * Includes array(
-     *      selector,       $(selector)     class name or id
-     *      formType,       form type service alias
-     *      saveService = array('serviceName' => 'saveMethod')
-     *      successFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      errorFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      target          $(target)       selector where form will be generated
-     *      isModal         default: false  open form in modal window
-     * )
-     * saveService          service alias $serviceName->$saveMethod(Form $form, Request $request)
-     * successFunctions     function that triggers when filter form is valid
-     * errorFunctions       function that triggers when filter form has errors
      *
      * @return string
      */
@@ -111,7 +113,7 @@ class AjaxFormExtension extends \Twig_Extension
     /**
      * Adds default options like url
      *
-     * @param mixed[] $options
+     * @param mixed[] &$options
      */
     public function addDefaultOptions(&$options)
     {

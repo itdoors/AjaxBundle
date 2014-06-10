@@ -1,9 +1,11 @@
 <?php
 
 namespace ITDoors\AjaxBundle\Twig;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Session\Session;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * Twig extension for rendering filter form
@@ -47,8 +49,10 @@ class AjaxFilterExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ajax_filter_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
-            'ajax_filter_render_short' => new \Twig_Function_Method($this, 'renderShort', array('is_safe' => array('html')))
+            'ajax_filter_render' =>
+                new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'ajax_filter_render_short' =>
+                new \Twig_Function_Method($this, 'renderShort', array('is_safe' => array('html')))
         );
     }
 
@@ -120,16 +124,25 @@ class AjaxFilterExtension extends \Twig_Extension
     /**
      * Return session filter data depending on filter namespace
      *
-     * @param string $namespace
+     * @param string $filterNamespace
      *
      * @return mixed[]
      */
-    public function getSessionFilters($namespace)
+    public function getSessionFilters($filterNamespace)
     {
         /** @var Session $session */
         $session = $this->container->get('session');
+        $type = BaseFilterController::FILTER_KEY;
+        $filterNamespace = $filterNamespace ? $filterNamespace: BaseFilterController::DEFAULT_FILTER_NAMESPACE;
 
-        return $session->get($namespace);
+        $filters = $session->get($filterNamespace);
+
+        if (is_array($filters) && array_key_exists($type, $filters)) {
+            return $filters[$type];
+        }
+
+        return array();
+
     }
 
     /**

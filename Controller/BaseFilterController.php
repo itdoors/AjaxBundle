@@ -20,6 +20,35 @@ class BaseFilterController extends Controller
     protected $baseRoute = 'lists_sales_base_index';
 
     /**
+     * setter for $filterNamespace
+     *
+     * @param string $namespace
+     */
+    public function setFilterNamespace($namespace)
+    {
+        $this->filterNamespace = $namespace;
+    }
+
+    /**
+     * setter for $filterFormName
+     *
+     * @param string $filterFormName
+     */
+    public function setFilterFormName($filterFormName)
+    {
+        $this->filterFormName = $filterFormName;
+    }
+
+    /**
+     * setter for baseRoute
+     *
+     * @param string $route
+     */
+    public function setBaseRoute($route)
+    {
+        $this->baseRoute = $route;
+    }
+    /**
      * setFilters into the session with namespace as a key
      *
      * @param string  $filterNamespace
@@ -83,16 +112,18 @@ class BaseFilterController extends Controller
      * Adds record to session
      *
      * @param string $key
-     * @param string $value
+     * @param mixed  $value
      * @param string $type
+     * @param string $filterNamespace
      */
-    public function addToSessionValues($key, $value, $type = self::FILTER_KEY)
+    public function addToSessionValues($key, $value, $type = self::FILTER_KEY, $filterNamespace = '')
     {
-        $data = $this->getSessionValues($this->getNamespace(), $type);
+        $filterNamespace = $filterNamespace ? $filterNamespace : $this->filterNamespace;
+
+        $data = $this->getSessionValues($filterNamespace, $type);
 
         $data[$key] = $value;
-
-        $this->setSessionValues($this->getNamespace(), $data, $type);
+        $this->setSessionValues($filterNamespace, $data, $type);
     }
 
     /**
