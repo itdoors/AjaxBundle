@@ -37,12 +37,18 @@ class FilterController extends BaseFilterController
 
             $this->setFilters($requestData['filterNamespace'], $data);
         }
-            $this->clearPaginator($requestData['filterNamespace']);
+
+        $this->clearPaginator($requestData['filterNamespace']);
+
+        $successFunctions = isset($requestData['successFunctions']) ?
+            stripslashes($requestData['successFunctions']) :
+            array();
+
         $result = array(
             'html' => '',
             'error' => false,
             'success' => true,
-            'successFunctions' => isset($requestData['successFunctions']) ? $requestData['successFunctions'] : array()
+            'successFunctions' => $successFunctions
         );
 
         return new Response(json_encode($result));
