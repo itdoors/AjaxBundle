@@ -45,7 +45,7 @@ var ITDoorsAjax = (function() {
 
         this.initAjaxTab();
 
-    }
+    };
 
     ITDoorsAjax.prototype.initSelect2 = function()
     {
@@ -58,7 +58,7 @@ var ITDoorsAjax = (function() {
         $('.' + selfClass.params.select2Class).each(function(index) {
             selfClass.select2($(this));
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initDateRange = function()
     {
@@ -77,7 +77,7 @@ var ITDoorsAjax = (function() {
                     '<span class="input-group-btn">' +
                     '<button class="btn default date-range-toggle" type="button">' +
                     '   <i class="fa fa-calendar"></i>' +
-                    '</button>'
+                    '</button>' +
             '</span>';
 
             self.append($(btn));
@@ -104,7 +104,7 @@ var ITDoorsAjax = (function() {
             }
             );
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initDateRangeCustom = function()
     {
@@ -123,7 +123,7 @@ var ITDoorsAjax = (function() {
                     '<span class="input-group-btn">' +
                     '<button class="btn default date-range-toggle" type="button">' +
                     '   <i class="fa fa-calendar"></i>' +
-                    '</button>'
+                    '</button>' +
             '</span>';
 
             self.append($(btn));
@@ -182,7 +182,7 @@ var ITDoorsAjax = (function() {
             self.find('input').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
             $(this).show();
         });
-    }
+    };
 
     ITDoorsAjax.prototype.updateList = function(targetId)
     {
@@ -206,7 +206,7 @@ var ITDoorsAjax = (function() {
                 selfClass.unblockUI(target);
             }
         });
-    }
+    };
 
     ITDoorsAjax.prototype.blockUI = function(el, centerY) {
         var selfClass = this;
@@ -287,7 +287,7 @@ var ITDoorsAjax = (function() {
                         results: data
                     };
                 }
-            }
+            };
         }
 
         if (urlById) {
@@ -300,14 +300,14 @@ var ITDoorsAjax = (function() {
                         },
                         dataType: "json"
                     }).done(function(data) {
-                        callback(data)
+                        callback(data);
                     });
                 }
-            }
+            };
         }
 
         $selector.select2(params);
-    }
+    };
 
     ITDoorsAjax.prototype.resetForm = function(form)
     {
@@ -322,19 +322,19 @@ var ITDoorsAjax = (function() {
                 $(this).val('');
             }
 
-            if ($(this).attr('type') == 'checkbox') {
+            if ($(this).attr('type') === 'checkbox') {
                 if ($(this).is(':checked')) {
                     $(this).trigger('click');
                 }
             }
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initAjaxFilterForm = function()
     {
         var selfClass = this;
 
-        var $form = $('.' + selfClass.params.ajaxFilterFormClass)
+        var $form = $('.' + selfClass.params.ajaxFilterFormClass);
 
         $('.' + selfClass.params.ajaxFilterFormClass + ' .itdoors-filter-cancel-btn').live('click', function(e) {
             e.preventDefault();
@@ -444,7 +444,7 @@ var ITDoorsAjax = (function() {
     {
         var selfClass = this;
 
-        var $form = $('.' + selfClass.params.ajaxFormClass)
+        var $form = $('.' + selfClass.params.ajaxFormClass);
 
         $('.' + selfClass.params.ajaxFormClass + ' .itdoors-form-cancel-btn').live('click', function(e) {
             e.preventDefault();
@@ -508,7 +508,7 @@ var ITDoorsAjax = (function() {
                 }
             });
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initAjaxPagination = function()
     {
@@ -589,8 +589,8 @@ var ITDoorsAjax = (function() {
                     }
                 }
             }
-        })
-    }
+        });
+    };
     ITDoorsAjax.prototype.initAjaxTab = function()
     {
         var selfClass = this;
@@ -599,7 +599,7 @@ var ITDoorsAjax = (function() {
             e.preventDefault();
             selfClass.updateTab($(this).data('tab'));
         });
-    }
+    };
     ITDoorsAjax.prototype.updateTab = function(tab)
     {
         var selfClass = this;
@@ -639,6 +639,6 @@ var ITDoorsAjax = (function() {
             }
         });
 
-    }
+    };
     return new ITDoorsAjax();
 })();
