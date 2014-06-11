@@ -2,18 +2,18 @@
 
 namespace ITDoors\AjaxBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * FilterController class
  *
  * Generates, submits, handles ajax filter forms
  */
-class FilterController extends Controller
+class FilterController extends BaseFilterController
 {
+
     /**
      * indexAction
      *
@@ -39,7 +39,7 @@ class FilterController extends Controller
 
             $this->setFilters($requestData['filterNamespace'], $data);
         }
-
+        $this->clearPaginator($requestData['filterNamespace']);
         $result = array(
             'html' => '',
             'error' => false,
@@ -48,46 +48,5 @@ class FilterController extends Controller
         );
 
         return new Response(json_encode($result));
-    }
-
-    /**
-     * Sets filter info to the session
-     *
-     * @param string  $filterNamespace
-     * @param mixed[] $filters
-     */
-    public function setFilters($filterNamespace, $filters)
-    {
-        /** @var Session $session */
-        $session = $this->get('session');
-
-        $session->set($filterNamespace, $filters);
-    }
-
-    /**
-     * Get filter from session
-     *
-     * @param string $filterNamespace
-     *
-     * @return mixed[]
-     */
-    public function getFilters($filterNamespace)
-    {
-        /** @var Session $session */
-        $session = $this->get('session');
-
-        $filters = $session->get($filterNamespace);
-
-        return $filters;
-    }
-
-    /**
-     * Clear filters
-     *
-     * @param string $filterNamespace
-     */
-    public function clearFilters($filterNamespace)
-    {
-        $this->setFilters($filterNamespace, array());
     }
 }
