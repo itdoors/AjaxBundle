@@ -89,7 +89,7 @@ class BaseFilterController extends Controller
         $filterNamespace = $filterNamespace ? $filterNamespace : $this->filterNamespace;
 
         $data = $session->get($filterNamespace);
-        
+
         if (is_array($data) && array_key_exists($type, $data)) {
             return $data[$type];
         }
