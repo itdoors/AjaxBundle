@@ -6,6 +6,8 @@ var ITDoorsAjax = (function() {
         ajaxFilterFormClass: 'ajax-filter-form',
         ajaxPaginationClass: 'it-doors-ajax-pagination-class',
         ajaxPaginationHolder: 'it-doors-pagination-holder',
+        ajaxTabClass: 'ajax-tab-class',
+        ajaxTabHolder: 'ajax-tab-holder',
         shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'itdoors-select2',
@@ -18,7 +20,7 @@ var ITDoorsAjax = (function() {
         loadingImgPath: ''
     };
 
-    function ITDoorsAjax(){
+    function ITDoorsAjax() {
         this.params = {};
     };
 
@@ -39,6 +41,9 @@ var ITDoorsAjax = (function() {
         this.initDateRangeCustom();
 
         this.initAjaxPagination();
+
+        this.initAjaxTab();
+
     }
 
     ITDoorsAjax.prototype.initSelect2 = function()
@@ -68,34 +73,34 @@ var ITDoorsAjax = (function() {
             var $form = self.closest('form');
 
             var btn =
-                '<span class="input-group-btn">' +
+                    '<span class="input-group-btn">' +
                     '<button class="btn default date-range-toggle" type="button">' +
                     '   <i class="fa fa-calendar"></i>' +
-                    '</button>'
+                    '</button>' +
             '</span>';
 
             self.append($(btn));
 
             $(this).daterangepicker({
-                    opens: (App.isRTL() ? 'left' : 'right'),
-                    format: 'DD.MM.YYYY',
-                    separator: ' to ',
-                    startDate: moment().subtract('days', 29),
-                    endDate: moment()
-                },
-                function (start, end) {
-                    var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
-                    var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
+                opens: (App.isRTL() ? 'left' : 'right'),
+                format: 'DD.MM.YYYY',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },
+            function(start, end) {
+                var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
+                var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
 
-                    daterangeStart.val(start.format('DD.MM.YYYY'));
-                    daterangeEnd.val(end.format('DD.MM.YYYY'));
+                daterangeStart.val(start.format('DD.MM.YYYY'));
+                daterangeEnd.val(end.format('DD.MM.YYYY'));
 
-                    self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+                self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
 
-                    if ($form.hasClass(selfClass.params.shortFormClass)) {
-                        $form.trigger('change');
-                    }
+                if ($form.hasClass(selfClass.params.shortFormClass)) {
+                    $form.trigger('change');
                 }
+            }
             );
         });
     }
@@ -114,63 +119,63 @@ var ITDoorsAjax = (function() {
             var $form = self.closest('form');
 
             var btn =
-                '<span class="input-group-btn">' +
+                    '<span class="input-group-btn">' +
                     '<button class="btn default date-range-toggle" type="button">' +
                     '   <i class="fa fa-calendar"></i>' +
-                    '</button>'
-                '</span>';
+                    '</button>' +
+            '</span>';
 
             self.append($(btn));
 
             $(this).daterangepicker({
-                    opens:  'right',
-                    startDate: moment().subtract('days', 29),
-                    endDate: moment(),
-                    dateLimit: {
-                        days: 60
-                    },
-                    showDropdowns: false,
-                    showWeekNumbers: true,
-                    timePicker: false,
-                    timePickerIncrement: 1,
-                    timePicker12Hour: true,
-                    ranges: {
-                        'Сегодня': [moment(), moment()],
-                        'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                        'Последняя неделя': [moment().subtract('days', 6), moment()],
-                        'Последние 30 дней': [moment().subtract('days', 29), moment()],
-                        'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
-                        'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                    },
-                    buttonClasses: ['btn'],
-                    applyClass: 'blue',
-                    cancelClass: 'default',
-                    format: 'MM/DD/YYYY',
-                    separator: ' до ',
-                    language: 'ru',
-                    locale: {
-                        applyLabel: 'Принять',
-                        fromLabel: 'До',
-                        toLabel: 'С',
-                        customRangeLabel: 'Выберите интервал',
-                        daysOfWeek: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-                        monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
-                        firstDay: 1
-                    }
+                opens: 'right',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                dateLimit: {
+                    days: 60
                 },
-                function (start, end) {
-                    var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
-                    var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
-
-                    daterangeStart.val(start.format('DD.MM.YYYY'));
-                    daterangeEnd.val(end.format('DD.MM.YYYY'));
-
-                    self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
-
-                    if ($form.hasClass(selfClass.params.shortFormClass)) {
-                        $form.trigger('change');
-                    }
+                showDropdowns: false,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                ranges: {
+                    'Сегодня': [moment(), moment()],
+                    'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Последняя неделя': [moment().subtract('days', 6), moment()],
+                    'Последние 30 дней': [moment().subtract('days', 29), moment()],
+                    'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                    'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                buttonClasses: ['btn'],
+                applyClass: 'blue',
+                cancelClass: 'default',
+                format: 'MM/DD/YYYY',
+                separator: ' до ',
+                language: 'ru',
+                locale: {
+                    applyLabel: 'Принять',
+                    fromLabel: 'До',
+                    toLabel: 'С',
+                    customRangeLabel: 'Выберите интервал',
+                    daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                    firstDay: 1
                 }
+            },
+            function(start, end) {
+                var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
+                var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
+
+                daterangeStart.val(start.format('DD.MM.YYYY'));
+                daterangeEnd.val(end.format('DD.MM.YYYY'));
+
+                self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+
+                if ($form.hasClass(selfClass.params.shortFormClass)) {
+                    $form.trigger('change');
+                }
+            }
             );
 
             self.find('input').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
@@ -185,23 +190,24 @@ var ITDoorsAjax = (function() {
         var target = $('#' + targetId);
 
         var url = target.data('url');
+
         var params = target.data('params');
 
         $.ajax({
             type: 'POST',
             url: url,
             data: params,
-            beforeSend: function () {
+            beforeSend: function() {
                 selfClass.blockUI(target);
             },
-            success: function (response) {
+            success: function(response) {
                 target.html(response);
                 selfClass.unblockUI(target);
             }
         });
     }
 
-    ITDoorsAjax.prototype.blockUI = function (el, centerY) {
+    ITDoorsAjax.prototype.blockUI = function(el, centerY) {
         var selfClass = this;
 
         if (el.height() <= 400) {
@@ -225,13 +231,13 @@ var ITDoorsAjax = (function() {
     };
 
     // wrapper function to  un-block element(finish loading)
-    ITDoorsAjax.prototype.unblockUI = function (el, clean) {
+    ITDoorsAjax.prototype.unblockUI = function(el, clean) {
         el.css('position', '');
         el.css('zoom', '');
         el.unblock();
     };
 
-    ITDoorsAjax.prototype.select2 = function (selector, defaultParams){
+    ITDoorsAjax.prototype.select2 = function(selector, defaultParams) {
 
         var $selector = $(selector);
 
@@ -269,13 +275,13 @@ var ITDoorsAjax = (function() {
             params.ajax = {
                 url: url,
                 dataType: 'json',
-                data: function (term, page) {
+                data: function(term, page) {
                     return {
                         query: term,
                         q: term
                     };
                 },
-                results: function (data, page) {
+                results: function(data, page) {
                     return {
                         results: data
                     };
@@ -284,7 +290,7 @@ var ITDoorsAjax = (function() {
         }
 
         if (urlById) {
-            params.initSelection = function (element, callback) {
+            params.initSelection = function(element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
                     $.ajax(urlById, {
@@ -292,7 +298,7 @@ var ITDoorsAjax = (function() {
                             id: id
                         },
                         dataType: "json"
-                    }).done(function (data) {
+                    }).done(function(data) {
                         callback(data)
                     });
                 }
@@ -306,7 +312,7 @@ var ITDoorsAjax = (function() {
     {
         var selfClass = this;
 
-        form.find('.' + selfClass.params.canBeResetedClass).each(function(index){
+        form.find('.' + selfClass.params.canBeResetedClass).each(function(index) {
             if ($(this).hasClass(selfClass.params.select2Class)) {
                 $(this).select2('data', null);
             }
@@ -352,7 +358,7 @@ var ITDoorsAjax = (function() {
 
             $(this).ajaxSubmit({
                 dataType: 'json',
-                beforeSend: function () {
+                beforeSend: function() {
 
                     selfClass.blockUI(self);
                 },
@@ -387,7 +393,7 @@ var ITDoorsAjax = (function() {
             });
         });
 
-        var $formShort = $('.' + selfClass.params.ajaxFilterFormClass + '.' + selfClass.params.shortFormClass).live('change', function(){
+        var $formShort = $('.' + selfClass.params.ajaxFilterFormClass + '.' + selfClass.params.shortFormClass).live('change', function() {
             $(this).submit();
         });
     };
@@ -514,7 +520,7 @@ var ITDoorsAjax = (function() {
 
             var page = $(this).data('page');
 
-            var parentHolder = $(this).parents('.'+selfClass.params.ajaxPaginationHolder);
+            var parentHolder = $(this).parents('.' + selfClass.params.ajaxPaginationHolder);
 
             console.log(page);
             var url = parentHolder.data('url');
@@ -540,7 +546,6 @@ var ITDoorsAjax = (function() {
                     $target.show();
                     selfClass.blockUI($target);
                 },
-
                 success: function(response) {
                     selfClass.unblockUI($target);
 
@@ -562,14 +567,59 @@ var ITDoorsAjax = (function() {
                         }
                     }
                 }
-
-
-
             });
-
-
-
         })
+    }
+    
+    ITDoorsAjax.prototype.initAjaxTab = function()
+    {
+        var selfClass = this;
+        $('.' + selfClass.params.ajaxTabClass).die('click');
+        $('.' + selfClass.params.ajaxTabClass).live('click', function(e) {
+            e.preventDefault();
+            selfClass.updateTab($(this).data('tab'));
+        });
+    }
+    
+    ITDoorsAjax.prototype.updateTab = function(tab)
+    {
+        var selfClass = this;
+
+        var obj = $('a[data-tab=' + tab + ']');
+
+        var blockupdate = $('.' + $(obj).data('block-update'));
+
+        var url = $(obj).data('url');
+
+        var url_ajax = $(obj).parents('ul').data('url');
+
+        var namespase = $(obj).parents('ul').data('namespase');
+
+        $.ajax({
+            type: 'POST',
+            url: url_ajax,
+            dataType: 'json',
+            data: {
+                tab: tab,
+                tabNamespace: namespase
+            },
+            beforeSend: function() {
+                selfClass.blockUI(blockupdate);
+            },
+            success: function(json) {
+                if (json.success) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        success: function(response) {
+                            blockupdate.html(response);
+                            selfClass.unblockUI(blockupdate);
+                        }
+                    });
+                }
+            }
+        });
+
     }
     return new ITDoorsAjax();
 })();

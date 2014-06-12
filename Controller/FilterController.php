@@ -2,8 +2,10 @@
 
 namespace ITDoors\AjaxBundle\Controller;
 
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * FilterController class
