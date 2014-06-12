@@ -9,3 +9,7 @@ it_doors_ajax_form:
 it_doors_ajax_paginator:
     pattern:  itdoors/ajax/paginator
     defaults: { _controller: ITDoorsAjaxBundle:Paginator:index }
+
+it_doors_ajax_tab:
+    pattern:  itdoors/ajax/tab
+    defaults: { _controller: ITDoorsAjaxBundle:Tab:index }
