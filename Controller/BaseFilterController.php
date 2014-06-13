@@ -219,10 +219,11 @@ class BaseFilterController extends Controller
      *
      * @param string $key
      * @param string $value
+     * @param string $filterNamespace
      */
-    public function addToFilters($key, $value)
+    public function addToFilters($key, $value, $filterNamespace = '')
     {
-        $this->addToSessionValues($key, $value, self::FILTER_KEY);
+        $this->addToSessionValues($key, $value, self::FILTER_KEY, $filterNamespace);
     }
 
     /**
