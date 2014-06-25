@@ -11,6 +11,7 @@ var ITDoorsAjax = (function() {
         shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'itdoors-select2',
+        textInputClass: 'itdoors-text',
         daterangeClass: 'itdoors-daterange',
         daterangeCustomClass: 'itdoors-daterange-custom',
         daterangeTextClass: 'itdoors-daterange-text',
@@ -311,13 +312,16 @@ var ITDoorsAjax = (function() {
     ITDoorsAjax.prototype.resetForm = function(form)
     {
         var selfClass = this;
-
         form.find('.' + selfClass.params.canBeResetedClass).each(function(index) {
             if ($(this).hasClass(selfClass.params.select2Class)) {
                 $(this).select2('data', null);
             }
 
             if ($(this).hasClass(selfClass.params.daterangeStartClass) || $(this).hasClass(selfClass.params.daterangeEndClass) || $(this).hasClass(selfClass.params.daterangeTextClass)) {
+                $(this).val('');
+            }
+
+            if ($(this).hasClass(selfClass.params.textInputClass)) {
                 $(this).val('');
             }
 
