@@ -82,8 +82,17 @@ var ITDoorsAjax = (function() {
 
             self.append($(btn));
 
+            if (Metronic) {
+                var rtl = Metronic.isRTL();
+            }
+
+            if (App) {
+                var rtl = App.isRTL();
+            }
+
+
             $(this).daterangepicker({
-                opens: (App.isRTL() ? 'left' : 'right'),
+                opens: (rtl ? 'left' : 'right'),
                 format: 'DD.MM.YYYY',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
