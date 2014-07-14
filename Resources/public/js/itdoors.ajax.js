@@ -6,6 +6,7 @@ var ITDoorsAjax = (function() {
         ajaxFilterFormClass: 'ajax-filter-form',
         ajaxPaginationClass: 'it-doors-ajax-pagination-class',
         ajaxPaginationHolder: 'it-doors-pagination-holder',
+        ajaxOrderingClass: 'it-doors-ordering',
         ajaxTabClass: 'ajax-tab-class',
         ajaxTabHolder: 'ajax-tab-holder',
         shortFormClass: 'itdoors-short-form',
@@ -44,6 +45,8 @@ var ITDoorsAjax = (function() {
         this.initAjaxPagination();
 
         this.initAjaxTab();
+
+        this.initAjaxOrdering();
 
     }
 
@@ -634,5 +637,60 @@ var ITDoorsAjax = (function() {
         });
 
     }
+
+    ITDoorsAjax.prototype.initAjaxOrdering = function()
+    {
+        var selfClass = this;
+        $('.' + selfClass.params.ajaxOrderingClass).die( "click" );
+        $('.' + selfClass.params.ajaxOrderingClass).live('click', function(e){
+            e.preventDefault();
+
+            var field = $(this).data('field');
+            var url = $(this).data('url');
+            var type = $(this).data('type');
+            var orderingNamespace = $(this).data('ordering_namespace');
+            var field = $(this).data('field');
+            $target =  $(this);
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: url,
+                data: {
+                    field: field,
+                    type: type,
+                    orderingNamespace: orderingNamespace
+                },
+                beforeSend: function() {
+                    if (!$target.html()) {
+                        $target.show();
+                        $target.html(params.loadingText);
+                    }
+                    $target.show();
+                    selfClass.blockUI($target);
+                },
+                success: function(response) {
+                    selfClass.unblockUI($target);
+
+                    var successFunctions = $target.data('success');
+                    if (successFunctions) {
+                        for (key in successFunctions) {
+                            var successFunction = successFunctions[key].split('.');
+
+                            if (successFunction[0] && successFunction[1]) {
+                                if (window[successFunction[0]] && typeof window[successFunction[0]][successFunction[1]] === 'function') {
+                                    formok = window[successFunction[0]][successFunction[1]](key);
+                                }
+                            } else {
+                                if (typeof window[successFunctions[key]] === 'function') {
+                                    formok = window[successFunctions[key]](key);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+    }
+
     return new ITDoorsAjax();
 })();

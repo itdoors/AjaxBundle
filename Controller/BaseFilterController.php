@@ -436,10 +436,11 @@ class BaseFilterController extends Controller
      *
      * @param string $key
      * @param string $value
+     * @param string $filterNamespace
      */
-    public function addToOrdering($key, $value)
+    public function addToOrdering($key, $value, $filterNamespace = '')
     {
-        $this->addToSessionValues($key, $value, self::ORDER_KEY);
+        $this->addToSessionValues($key, $value, self::ORDER_KEY, $filterNamespace);
     }
 
     /**
