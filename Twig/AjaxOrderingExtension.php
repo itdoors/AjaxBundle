@@ -5,6 +5,7 @@ namespace ITDoors\AjaxBundle\Twig;
 use Knp\Bundle\PaginatorBundle\Twig\Extension\PaginationExtension;
 use Knp\Bundle\PaginatorBundle\Helper\Processor;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Twig extension for rendering ordering
@@ -70,8 +71,10 @@ class AjaxOrderingExtension extends \Twig_Extension
     {
         // @codingStandardsIgnoreStart
 
-        $ordering = $this->getOrdering($orderingNamespace);
+        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
+        $ordering = $baseFilter->getOrdering($orderingNamespace);
 
+        $ordered = false;
         if (isset($ordering[$field]) && $ordering[$field]) {
             $ordered = $ordering[$field];
         }
