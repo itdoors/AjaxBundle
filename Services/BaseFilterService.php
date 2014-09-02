@@ -473,6 +473,4 @@ class BaseFilterService
     {
         $this->getSessionValueByKey($key, $default, $filterNamespace, self::ORDER_KEY);
     }
-
-
 }
