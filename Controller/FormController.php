@@ -59,6 +59,14 @@ class FormController extends Controller
      */
     public function setDefaults(Form $form, $params)
     {
+        // Add defaults as hidden fields
+        foreach ($params['defaults'] as $key => $default) {
+            $form
+                ->add($key, 'hidden', array(
+                    'data' => $default
+                ));
+        }
+
         // If isset serviceDefault then add form dynamic defaults depending on static defaults
         if (isset($params['serviceDefault']) && sizeof($params['serviceDefault'])) {
             $serviceDefault = $this->container->get($params['serviceDefault']['alias']);
@@ -67,14 +75,6 @@ class FormController extends Controller
             if (method_exists($serviceDefault, $serviceDefaultMethod)) {
                 $serviceDefault->$serviceDefaultMethod($form, $params['defaults']);
             }
-        }
-
-        // Add defaults as hidden fields
-        foreach ($params['defaults'] as $key => $default) {
-            $form
-                ->add($key, 'hidden', array(
-                    'data' => $default
-                ));
         }
 
         // Add Submit buttons
@@ -98,7 +98,7 @@ class FormController extends Controller
             $serviceSaveMethod = $params['serviceSave']['method'];
 
             if (method_exists($serviceSave, $serviceSaveMethod)) {
-                $serviceSave->$serviceSaveMethod($form, $request, $params['defaults']);
+                $serviceSave->$serviceSaveMethod($form, $request, $params);
             }
         }
     }
