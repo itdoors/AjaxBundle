@@ -30,7 +30,7 @@ class TabController extends BaseFilterController
         $this->setTab($tabNamespace, $tab);
 
         $this->clearPaginator($tabNamespace);
-        
+
         $result = array(
             'html' => '',
             'error' => false,
