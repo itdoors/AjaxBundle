@@ -1,5 +1,5 @@
 {% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
-<div class="row ">
+<div class="row " style="position: relative" id="{{ form.vars.name }}Filter">
     <div class="col-md-12">
         <div class="portlet box yellow">
             <div class="portlet-title">
@@ -47,4 +47,13 @@
             </div>
         </div>
     </div>
+    
+    <div class="blockUI"></div>
+    <div class="blockUI blockOverlay" style="z-index: 1000; border: none; margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px; cursor: wait; position: absolute; opacity: 0.5; background-color: rgb(255, 255, 255);"></div>
+    <div class="blockUI blockMsg blockElement" style="z-index: 1011; position: absolute; padding: 2px; margin: 0px; width: 30%; top: 75.5px; left: 378px; text-align: center; color: rgb(0, 0, 0); border: none; cursor: wait;"><img src="/templates/metronic/img/ajax-loading.gif"></div>  
 </div>
+<script>
+    $(document).ready(function(){
+        ITDoorsAjax.unblockUI($('#{{ form.vars.name }}Filter'));
+    });
+</script>
