@@ -23,8 +23,12 @@ class OrderingController extends BaseFilterController
     {
         $field = $request->request->get('field');
         $orderType = $request->request->get('type');
+        $oneField = $request->request->get('oneField');
         $orderingNamespace = $request->request->get('orderingNamespace');
 
+        if ($oneField) {
+            $this->clearOrdering($orderingNamespace);
+        }
         $this->addToOrdering($field, $orderType, $orderingNamespace);
 
         $result = array(

@@ -57,6 +57,7 @@ class AjaxOrderingExtension extends \Twig_Extension
      * @param string $field
      * @param string $orderingNamespace
      * @param string $successFunctions
+     * @param bolean $oneField
      * @param string $template
      *
      * @return string
@@ -65,6 +66,7 @@ class AjaxOrderingExtension extends \Twig_Extension
         $field,
         $orderingNamespace = '',
         $successFunctions = '',
+        $oneField = false,
         $template = "ITDoorsCommonBundle:AjaxOrdering:ordering.html.twig"
         // @codingStandardsIgnoreStart
     )
@@ -82,6 +84,7 @@ class AjaxOrderingExtension extends \Twig_Extension
         $data['successFunctions'] = $successFunctions;
         $data['orderingNamespace'] = $orderingNamespace;
         $data['ordered'] = $ordered;
+        $data['oneField'] = $oneField;
 
         return $this->environment->render($template, $data);
     }

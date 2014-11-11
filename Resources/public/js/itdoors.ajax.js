@@ -654,6 +654,7 @@ var ITDoorsAjax = (function() {
             var type = $(this).data('type');
             var orderingNamespace = $(this).data('ordering_namespace');
             var field = $(this).data('field');
+            var oneField = $(this).data('one_field');
             $target =  $(this);
             $.ajax({
                 type: 'POST',
@@ -662,7 +663,8 @@ var ITDoorsAjax = (function() {
                 data: {
                     field: field,
                     type: type,
-                    orderingNamespace: orderingNamespace
+                    orderingNamespace: orderingNamespace,
+                    oneField: oneField
                 },
                 beforeSend: function() {
                     if (!$target.html()) {
