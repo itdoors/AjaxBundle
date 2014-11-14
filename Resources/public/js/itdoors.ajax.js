@@ -87,9 +87,7 @@ var ITDoorsAjax = (function() {
 
             if (Metronic) {
                 var rtl = Metronic.isRTL();
-            }
-
-            if (App) {
+            } else if (App) {
                 var rtl = App.isRTL();
             }
 
