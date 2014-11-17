@@ -85,19 +85,28 @@ var ITDoorsAjax = (function() {
 
             self.append($(btn));
 
-            if (Metronic) {
+            if (Metronic) {a
                 var rtl = Metronic.isRTL();
             } else if (App) {
                 var rtl = App.isRTL();
             }
-
 
             $(this).daterangepicker({
                 opens: (rtl ? 'left' : 'right'),
                 format: 'DD.MM.YYYY',
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
-                endDate: moment()
+                endDate: moment(),
+                locale: {
+                    applyLabel: 'ОК',
+                    cancelLabel: 'Отмена',
+                    fromLabel: 'от',
+                    toLabel: 'до',
+                    customRangeLabel: 'Выбрать диапазон',
+                    daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    firstDay: 0
+                }
             },
             function(start, end) {
                 var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
