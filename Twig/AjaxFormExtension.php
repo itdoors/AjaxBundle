@@ -76,13 +76,7 @@ class AjaxFormExtension extends \Twig_Extension
      */
     public function render($options)
     {
-        $html = 'ITDoorsAjaxBundle:Form:ajaxForm.html.twig';
-        if (isset($options['html'])) {
-            $html = $options['html'];
-        }
-        var_dump($options);die;
-
-        return $this->environment->render($html, array(
+        return $this->environment->render("ITDoorsAjaxBundle:Form:ajaxForm.html.twig", array(
             'options' => $options
         ));
     }
