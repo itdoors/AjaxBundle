@@ -41,8 +41,13 @@ class FormController extends Controller
 
             $this->saveForm($form, $request, $params);
         } else {
+            $html = 'ITDoorsAjaxBundle:Form:ajaxForm.html.twig';
+            if (isset($params['html'])) {
+                $html = $params['html'];
+            }
+            
             $return['error'] = true;
-            $return['content'] = $this->renderView('ITDoorsAjaxBundle:Form:ajaxForm.html.twig', array(
+            $return['content'] = $this->renderView($html, array(
                 'form' => $form->createView(),
                 'params' => json_encode($params)
             ));
