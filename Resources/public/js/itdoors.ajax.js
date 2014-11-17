@@ -479,6 +479,7 @@ var ITDoorsAjax = (function() {
 
             $selector.fadeIn();
             $target.html('');
+            $target.hide();
         });
 
         $form.die('submit');
