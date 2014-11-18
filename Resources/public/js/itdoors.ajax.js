@@ -515,6 +515,7 @@ var ITDoorsAjax = (function() {
 
                         $selector.fadeIn();
                         $target.html('');
+                        $target.hide();
 
                         if (params.successFunctions) {
                             var successFunctions = params.successFunctions;
@@ -537,7 +538,7 @@ var ITDoorsAjax = (function() {
                 }
             });
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initAjaxPagination = function()
     {
