@@ -77,7 +77,7 @@ var ITDoorsAjax = (function() {
         var selfClass = this;
 
         $('.' + selfClass.params.select2Class).each(function(index) {
-            selfClass.select2DependentClass($(this));
+            selfClass.select2Dependent($(this));
         });
     };
     ITDoorsAjax.prototype.initListenerSelect2Dependent = function()
