@@ -360,7 +360,7 @@ var ITDoorsAjax = (function() {
         $dependent.on('select2-selecting', function(e){
             dependentId = e.object.id;
             if (e.object.id) {
-                 $selector.removeAttr('disabled');
+                $selector.removeAttr('disabled');
             } else {
                 $selector.select2('data', '');
                 $selector.trigger("select2-clearing");
@@ -419,6 +419,7 @@ var ITDoorsAjax = (function() {
                     }).done(function(data) {
                         callback(data);
                     });
+                    $selector.removeAttr('disabled');
                 }
             };
         }
@@ -457,25 +458,44 @@ var ITDoorsAjax = (function() {
                 $selector.trigger("select2-clearing");
                 $selector.attr('disabled', 'disabled');
                 $.ajax(
-                        urlByOne, {
-                        data: {
-                            field: $field,
-                            dependent: dependentId
-                            },
-                            dataType: "json"
-                        }).done(function(data) {
-                            if (data === null) {
-                                data = '';
-                            }
-                            $selector.select2('data', data);
-                            $selector.trigger("change");
-                        });
+                    urlByOne, {
+                    data: {
+                        field: $field,
+                        dependent: dependentId
+                        },
+                        dataType: "json"
+                    }).done(function(data) {
+                        if (data === null) {
+                            data = '';
+                        }
+                        $selector.select2('data', data);
+                        $selector.trigger("change");
+                    });
                 
             } else {
                 $selector.select2('data', '');
                 $selector.trigger("select2-clearing");
                 $selector.removeAttr('disabled');
             }
+        });
+        $dependent.on('change', function(){
+            $selector.select2('data', '');
+            $selector.trigger("select2-clearing");
+            $selector.attr('disabled', 'disabled');
+            $.ajax(
+                urlByOne, {
+                data: {
+                    field: $field,
+                    dependent: dependentId
+                    },
+                    dataType: "json"
+                }).done(function(data) {
+                    if (data === null) {
+                        data = '';
+                    }
+                    $selector.select2('data', data);
+                    $selector.trigger("change");
+                });
         });
         $dependent.on('select2-clearing', function(e){
             dependentId = null;
@@ -511,14 +531,13 @@ var ITDoorsAjax = (function() {
                         dependent: dependentId
                     };
                 },
-                results: function(data, page) {
+                results: function(data, page) {                    
                     return {
                         results: data
                     };
                 }
             };
         }
-
         if (urlById) {
             params.initSelection = function(element, callback) {
                 var id = $(element).val();
@@ -531,6 +550,7 @@ var ITDoorsAjax = (function() {
                     }).done(function(data) {
                         callback(data);
                     });
+                    $selector.removeAttr('disabled');
                 }
             };
         }
@@ -596,6 +616,23 @@ var ITDoorsAjax = (function() {
                 }
             }
         });
+        if (dependentVal !== '') {
+            var $text = $('#'+$object.attr('id')+'Div');
+            if (url) {
+                $.ajax(url, {
+                    data: {
+                        field: $field,
+                        id: dependentVal
+                    },
+                    dataType: "json"
+                }).done(function(data) {
+                    if (data === null) {
+                        data = '';
+                    }
+                    $text.html(data);
+                });
+            }
+        }
     };
 
     ITDoorsAjax.prototype.resetForm = function(form)
