@@ -550,7 +550,6 @@ var ITDoorsAjax = (function() {
                     }).done(function(data) {
                         callback(data);
                     });
-                    $selector.removeAttr('disabled');
                 }
             };
         }
