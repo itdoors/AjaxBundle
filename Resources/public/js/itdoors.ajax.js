@@ -493,8 +493,15 @@ var ITDoorsAjax = (function() {
                     if (data === null) {
                         data = '';
                     }
-                    $selector.select2('data', data);
-                    $selector.trigger("change");
+                    if (data == ''){
+                        $selector.select2('data', '');
+                        $selector.trigger("select2-clearing");
+                        $selector.removeAttr('disabled');
+                    } else {
+                        $selector.select2('data', data);
+                        $selector.trigger("change");
+                        $selector.attr('disabled', 'disabled');
+                    }
                 });
         });
         $dependent.on('select2-clearing', function(e){
@@ -550,6 +557,7 @@ var ITDoorsAjax = (function() {
                     }).done(function(data) {
                         callback(data);
                     });
+                    $selector.attr('disabled', 'disabled');
                 }
             };
         }
