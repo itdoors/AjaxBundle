@@ -12,6 +12,8 @@ var ITDoorsAjax = (function() {
         shortFormClass: 'itdoors-short-form',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'itdoors-select2',
+        select2DependentClass: 'itdoors-select2-dependent',
+        select2ListenerDependentClass: 'itdoors-dependent-listener-select2',
         textInputClass: 'itdoors-text',
         daterangeClass: 'itdoors-daterange',
         daterangeCustomClass: 'itdoors-daterange-custom',
@@ -38,6 +40,10 @@ var ITDoorsAjax = (function() {
 
         this.initSelect2();
 
+        this.initSelect2Dependent();
+        
+        this.initListenerSelect2Dependent();
+
         this.initDateRange();
 
         this.initDateRangeCustom();
@@ -62,6 +68,26 @@ var ITDoorsAjax = (function() {
             selfClass.select2($(this));
         });
     }
+    ITDoorsAjax.prototype.initSelect2Dependent = function()
+    {
+        if (!jQuery().select2) {
+            return;
+        }
+
+        var selfClass = this;
+
+        $('.' + selfClass.params.select2DependentClass).each(function(index) {
+            selfClass.select2Dependent($(this));
+        });
+    };
+    ITDoorsAjax.prototype.initListenerSelect2Dependent = function()
+    {
+        var selfClass = this;
+
+        $('.' + selfClass.params.select2ListenerDependentClass).each(function(index) {
+            selfClass.select2ListenerDependent($(this));
+        });
+    };
 
     ITDoorsAjax.prototype.initDateRange = function()
     {
@@ -203,6 +229,78 @@ var ITDoorsAjax = (function() {
         });
     }
 
+    ITDoorsAjax.prototype.initDateRangeCustomById = function(id)
+    {
+        var selfClass = this;
+
+        if (!jQuery().daterangepicker) {
+            return;
+        }
+
+        var self = $('#' + id);
+
+        var $form = self.closest('form');
+
+
+
+        self.append($(btn));
+
+        self.daterangepicker({
+                opens: 'right',
+                startDate: moment().subtract('days', 29),
+                endDate: moment(),
+                dateLimit: {
+                    days: 60
+                },
+                showDropdowns: false,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                ranges: {
+                    'Сегодня': [moment(), moment()],
+                    'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                    'Последняя неделя': [moment().subtract('days', 6), moment()],
+                    'Последние 30 дней': [moment().subtract('days', 29), moment()],
+                    'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                    'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                buttonClasses: ['btn'],
+                applyClass: 'blue',
+                cancelClass: 'default',
+                format: 'MM/DD/YYYY',
+                separator: ' до ',
+                language: 'ru',
+                locale: {
+                    applyLabel: 'Принять',
+                    fromLabel: 'До',
+                    toLabel: 'С',
+                    customRangeLabel: 'Выберите интервал',
+                    daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                    firstDay: 1
+                }
+            },
+            function(start, end) {
+                var daterangeStart = self.parent().find('.' + selfClass.params.daterangeStartClass);
+                var daterangeEnd = self.parent().find('.' + selfClass.params.daterangeEndClass);
+
+                daterangeStart.val(start.format('DD.MM.YYYY'));
+                daterangeEnd.val(end.format('DD.MM.YYYY'));
+
+                self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+
+                if ($form.hasClass(selfClass.params.shortFormClass)) {
+                    $form.trigger('change');
+                }
+            }
+        );
+
+        self.find('input').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $(this).show();
+
+    }
+
     ITDoorsAjax.prototype.updateList = function(targetId)
     {
         var selfClass = this;
@@ -257,9 +355,151 @@ var ITDoorsAjax = (function() {
         el.unblock();
     };
 
-    ITDoorsAjax.prototype.select2 = function(selector, defaultParams) {
+    ITDoorsAjax.prototype.select2 = function($selector, defaultParams) {
 
-        var $selector = $(selector);
+        if (!defaultParams) {
+            defaultParams = {};
+        }
+        if (!$selector.length) {
+            return false;
+        }
+        if (!$.isFunction($.fn.select2)) {
+            return false;
+        }
+        var url = $selector.data('url');
+        var urlById = $selector.data('url-by-id');
+        var selectorParams = $selector.data('params');
+        var params = $.extend({
+            minimumInputLength: 2,
+            allowClear: true
+        }, selectorParams);
+        params = $.extend(params, defaultParams);
+        var choices = $selector.data('choices');
+        if (choices) {
+            params.data = choices;
+        }
+        if (url) {
+            params.ajax = {
+                url: url,
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            };
+        }
+        if (urlById) {
+            params.initSelection = function(element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax(urlById, {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function(data) {
+                        callback(data);
+                    });
+                }
+            };
+        }
+        $selector.select2(params);
+    };
+    ITDoorsAjax.prototype.select2Dependent = function($selector, defaultParams) {
+
+        if (!defaultParams) {
+            defaultParams = {};
+        }
+        if (!$selector.length) {
+            return false;
+        }
+        if (!$.isFunction($.fn.select2)) {
+            alert('Function select2 not found');
+            return false;
+        }
+        var url = $selector.data('url');
+        var urlById = $selector.data('url-by-id');
+        var $dependent = $('#'+$selector.data('dependent'));
+        var dependentId = null;
+        $selector.attr('disabled', 'disabled');
+        $dependent.on('select2-selecting', function(e){
+            dependentId = e.object.id;
+            if (e.object.id) {
+                $selector.removeAttr('disabled');
+            } else {
+                $selector.select2('data', '');
+                $selector.trigger("select2-clearing");
+                $selector.attr('disabled', 'disabled');
+            }
+        });
+        $dependent.on('select2-clearing', function(e){
+                $selector.select2('data', '');
+                $selector.trigger("select2-clearing");
+                $selector.attr('disabled', 'disabled');
+        });
+        
+        var selectorParams = $selector.data('params');
+
+        var params = $.extend({
+            minimumInputLength: 2,
+            allowClear: true
+        }, selectorParams);
+
+        params = $.extend(params, defaultParams);
+
+        var choices = $selector.data('choices');
+
+        if (choices) {
+            params.data = choices;
+        }
+
+        if (url) {
+            params.ajax = {
+                url: url,
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term,
+                        q: term,
+                        dependent: dependentId
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            };
+        }
+
+        if (urlById) {
+            params.initSelection = function(element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax(urlById, {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function(data) {
+                        callback(data);
+                    });
+                    $selector.removeAttr('disabled');
+                }
+            };
+        }
+
+        $selector.select2(params);
+        
+    };
+    ITDoorsAjax.prototype.select2DependentToSelect2 = function($selector, defaultParams) {
 
         if (!defaultParams) {
             defaultParams = {};
@@ -270,11 +510,78 @@ var ITDoorsAjax = (function() {
         }
 
         if (!$.isFunction($.fn.select2)) {
+            alert('Function select2 not found');
             return false;
         }
 
         var url = $selector.data('url');
         var urlById = $selector.data('url-by-id');
+        var urlByOne = $selector.data('url-by-one');
+        var $field = $selector.data('field');
+        var $dependent = $('#'+$selector.data('dependent'));
+        var dependentId = null;
+        $selector.attr('disabled', 'disabled');
+        
+        $dependent.on('select2-selecting', function(e){
+            dependentId = e.object.id;
+            if (e.object.isNew == undefined) {
+                
+                $selector.select2('data', '');
+                $selector.trigger("select2-clearing");
+                $selector.attr('disabled', 'disabled');
+                $.ajax(
+                    urlByOne, {
+                    data: {
+                        field: $field,
+                        dependent: dependentId
+                        },
+                        dataType: "json"
+                    }).done(function(data) {
+                        if (data === null) {
+                            data = '';
+                        }
+                        $selector.select2('data', data);
+                        $selector.trigger("change");
+                    });
+                
+            } else {
+                $selector.select2('data', '');
+                $selector.trigger("select2-clearing");
+                $selector.removeAttr('disabled');
+            }
+        });
+        $dependent.on('change', function(){
+            $selector.select2('data', '');
+            $selector.trigger("select2-clearing");
+            $selector.attr('disabled', 'disabled');
+            $.ajax(
+                urlByOne, {
+                data: {
+                    field: $field,
+                    dependent: dependentId
+                    },
+                    dataType: "json"
+                }).done(function(data) {
+                    if (data === null) {
+                        data = '';
+                    }
+                    if (data == ''){
+                        $selector.select2('data', '');
+                        $selector.trigger("select2-clearing");
+                        $selector.removeAttr('disabled');
+                    } else {
+                        $selector.select2('data', data);
+                        $selector.trigger("change");
+                        $selector.attr('disabled', 'disabled');
+                    }
+                });
+        });
+        $dependent.on('select2-clearing', function(e){
+            dependentId = null;
+            $selector.select2('data', '');
+            $selector.trigger("select2-clearing");
+            $selector.attr('disabled', 'disabled');
+        });
 
         var selectorParams = $selector.data('params');
 
@@ -298,17 +605,18 @@ var ITDoorsAjax = (function() {
                 data: function(term, page) {
                     return {
                         query: term,
-                        q: term
+                        field: $field,
+                        q: term,
+                        dependent: dependentId
                     };
                 },
-                results: function(data, page) {
+                results: function(data, page) {                    
                     return {
                         results: data
                     };
                 }
-            }
+            };
         }
-
         if (urlById) {
             params.initSelection = function(element, callback) {
                 var id = $(element).val();
@@ -319,14 +627,92 @@ var ITDoorsAjax = (function() {
                         },
                         dataType: "json"
                     }).done(function(data) {
-                        callback(data)
+                        callback(data);
                     });
+                    $selector.attr('disabled', 'disabled');
                 }
-            }
+            };
         }
 
         $selector.select2(params);
-    }
+    };
+    ITDoorsAjax.prototype.select2ListenerDependent = function($object, defaultParams) {
+
+        if (!defaultParams) {
+            defaultParams = {};
+        }
+
+        if (!$object.length) {
+            return false;
+        }
+
+        var url = $object.data('url');
+        var $dependent = $('#'+$object.data('dependent'));
+        var $field = $object.data('field');
+        var dependentVal = $dependent.val();
+
+        $dependent.on('select2-selecting', function(e){
+            var $text = $('#'+$object.attr('id')+'Div');
+            $text.text('');
+            if (e.object.id) {
+                $.ajax(url, {
+                    data: {
+                        field: $field,
+                        id: e.object.value
+                    },
+                    dataType: "json"
+                }).done(function(data) {
+                    if (data === null) {
+                        data = '';
+                    }
+                    $text.html(data);
+                });
+            }
+        });
+        $dependent.on('select2-clearing', function(e){
+            var $text = $('#'+$object.attr('id')+'Div');
+            $text.text('');
+        });
+        
+        $dependent.on('change', function(){
+            var $text = $('#'+$object.attr('id')+'Div');
+            dependentVal = $(this).val();
+            $text.text('');
+            if (dependentVal !== '') {
+                if (url) {
+                    $.ajax(url, {
+                        data: {
+                            field: $field,
+                            id: dependentVal
+                        },
+                        dataType: "json"
+                    }).done(function(data) {
+                        if (data === null) {
+                            data = '';
+                        }
+                        $text.html(data);
+                    });
+                }
+            }
+        });
+        if (dependentVal !== '') {
+            var $text = $('#'+$object.attr('id')+'Div');
+            if (url) {
+                $.ajax(url, {
+                    data: {
+                        field: $field,
+                        id: dependentVal
+                    },
+                    dataType: "json"
+                }).done(function(data) {
+                    if (data === null) {
+                        data = '';
+                    }
+                    $text.html(data);
+                });
+            }
+        }
+    };
 
     ITDoorsAjax.prototype.resetForm = function(form)
     {
@@ -479,6 +865,7 @@ var ITDoorsAjax = (function() {
 
             $selector.fadeIn();
             $target.html('');
+            $target.hide();
         });
 
         $form.die('submit');
@@ -514,6 +901,7 @@ var ITDoorsAjax = (function() {
 
                         $selector.fadeIn();
                         $target.html('');
+                        $target.hide();
 
                         if (params.successFunctions) {
                             var successFunctions = params.successFunctions;
@@ -536,7 +924,7 @@ var ITDoorsAjax = (function() {
                 }
             });
         });
-    }
+    };
 
     ITDoorsAjax.prototype.initAjaxPagination = function()
     {

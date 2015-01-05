@@ -45,7 +45,7 @@ class FormController extends Controller
             if (isset($params['html'])) {
                 $html = $params['html'];
             }
-            
+
             $return['error'] = true;
             $return['content'] = $this->renderView($html, array(
                 'form' => $form->createView(),
