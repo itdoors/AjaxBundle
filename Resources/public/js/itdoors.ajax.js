@@ -242,9 +242,6 @@ var ITDoorsAjax = (function() {
         var $form = self.closest('form');
 
 
-
-        self.append($(btn));
-
         self.daterangepicker({
                 opens: 'right',
                 startDate: moment().subtract('days', 29),
